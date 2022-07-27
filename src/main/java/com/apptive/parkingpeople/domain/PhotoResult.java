@@ -9,11 +9,12 @@ public class PhotoResult {
     @Column(name = "photo_result_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_submission_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "photo_submission_id", nullable = false)
     private PhotoSubmission submission;
 
     private int model_version;
 
     private float emptiness;
+
 }

@@ -17,5 +17,10 @@ public class User {
 
     private int point;
 
+    @OneToMany(mappedBy = "submitter")
+    List<PhotoSubmission> submissions;
+
+    @OneToMany(mappedBy = "user")
+    List<PointHistory> point_history;
 
 }

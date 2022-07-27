@@ -10,8 +10,8 @@ public class TrafficData {
     @Column(name = "traffic_data_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
     private float congestion;

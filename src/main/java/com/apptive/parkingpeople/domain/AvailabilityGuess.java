@@ -10,8 +10,8 @@ public class AvailabilityGuess {
     @Column(name = "availability_guess_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parking_lot_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "parking_lot_id", nullable = false)
     private ParkingLot lot;
 
     private int model_version;
@@ -19,4 +19,5 @@ public class AvailabilityGuess {
     private float availability;
 
     private Timestamp computed_at;
+
 }

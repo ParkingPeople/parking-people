@@ -9,13 +9,14 @@ public class PointHistory {
     @Column(name = "point_history_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private int earned;
 
-    private Reason reason;
+    private PointReason reason;
 
     private String reference;
+
 }

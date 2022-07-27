@@ -4,7 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.awt.*;
+
+import org.locationtech.jts.geom.Point;
+
 
 @Entity
 public class Location {
@@ -13,7 +15,7 @@ public class Location {
     @Column(name = "location_id")
     private Long id;
 
-    private Type type;
+    private LocationType type;
 
     private String name;
 
@@ -22,4 +24,5 @@ public class Location {
     private Point coordinates;
 
     private String address_old;
+
 }

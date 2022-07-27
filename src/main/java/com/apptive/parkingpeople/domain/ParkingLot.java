@@ -1,5 +1,7 @@
 package com.apptive.parkingpeople.domain;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,7 +11,7 @@ public class ParkingLot {
     @Column(name = "parking_lot_id")
     private Long id;
 
-    private Type type;
+    private LocationType type;
 
     private int capacity;
 
@@ -17,9 +19,14 @@ public class ParkingLot {
 
     private String fee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
+    @OneToMany(mappedBy = "lot")
+    private List<AvailabilityGuess> availability_guesses;
+
+    @OneToMany(mappedBy = "lot")
+    List<PhotoSubmission> photos;
 
 }
