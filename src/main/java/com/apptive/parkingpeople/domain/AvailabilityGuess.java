@@ -14,7 +14,7 @@ public class AvailabilityGuess {
     @JoinColumn(name = "parking_lot_id", nullable = false)
     private ParkingLot lot;
 
-    private int model_version;
+    private Long model_version;
 
     private float availability;
 

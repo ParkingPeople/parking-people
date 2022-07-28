@@ -13,8 +13,9 @@ public class PointHistory {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private int earned;
+    private Long earned;
 
+    @Enumerated(EnumType.STRING)
     private PointReason reason;
 
     private String reference;

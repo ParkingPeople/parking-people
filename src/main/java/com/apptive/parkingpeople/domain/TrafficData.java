@@ -10,7 +10,7 @@ public class TrafficData {
     @Column(name = "traffic_data_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 

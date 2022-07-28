@@ -21,6 +21,7 @@ public class PhotoSubmission {
 
     private Timestamp taken_at;
 
+    @Enumerated(EnumType.STRING)
     private AnalysisState state;
 
     @OneToMany(mappedBy = "submission")

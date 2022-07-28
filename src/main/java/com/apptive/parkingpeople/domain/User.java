@@ -11,11 +11,12 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private AuthType auth_type;
 
     private String username;
 
-    private int point;
+    private Long point;
 
     @OneToMany(mappedBy = "submitter")
     List<PhotoSubmission> submissions;

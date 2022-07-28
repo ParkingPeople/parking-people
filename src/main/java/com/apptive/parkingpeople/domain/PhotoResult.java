@@ -13,7 +13,7 @@ public class PhotoResult {
     @JoinColumn(name = "photo_submission_id", nullable = false)
     private PhotoSubmission submission;
 
-    private int model_version;
+    private Long model_version;
 
     private float emptiness;
 

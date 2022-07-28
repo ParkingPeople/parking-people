@@ -11,9 +11,10 @@ public class ParkingLot {
     @Column(name = "parking_lot_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private LocationType type;
 
-    private int capacity;
+    private Long capacity;
 
     private String hours;
 
