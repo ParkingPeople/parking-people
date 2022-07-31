@@ -16,7 +16,7 @@ public class TrafficDataService {
     @Value("${tmap-key}")
     private String tmapKey;
 
-    public float getCongestion(float x, float y) throws JsonProcessingException {
+    public double getCongestion(double x, double y) throws JsonProcessingException {
 
         String result = "";
 
@@ -58,7 +58,7 @@ public class TrafficDataService {
             return avg;
         }catch (Exception e){
             e.printStackTrace();
-            return 0.0f;
+            return 0.0;
         }
     }
 }

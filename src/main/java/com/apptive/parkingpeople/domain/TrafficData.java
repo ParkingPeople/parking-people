@@ -12,7 +12,7 @@ public class TrafficData {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", nullable = false)
-    private Location location;
+    private LocationDomain locationDomain;
 
     private float congestion;
 
