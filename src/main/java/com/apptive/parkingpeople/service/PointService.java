@@ -53,25 +53,23 @@ public class PointService {
         double x2 = southWest.getLatitude();
         double y2 = southWest.getLongitude();
 
-        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
+//        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2); // 점 2개로도 할 수 있는 듯
+        String pointFormat = String.format("'LINESTRING(%f %f, %f %f, %f %f, %f %f)')", y2, x2, y1, x2, y1, x1, y2, x1);
 
-        // 쿼리문 확인 필요
-        Query query = em.createNativeQuery("SELECT r.name "
-                        + "FROM `parking-people`.location_domain AS r "
-                        + "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", r.coordinates)", LocationDomain.class)
-                .setMaxResults(10);
+        Query query = em.createNativeQuery("SELECT name "
+                + "FROM location_domain "
+                + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)");
 
-        List<LocationDomain> locationDomains = query.getResultList();
-        for(int i = 0; i < locationDomains.size(); i++){
-            System.out.println("test" + i);
-            System.out.println(locationDomains.get(i).getName());
+        List resultList = query.getResultList();
+        int size = resultList.size();
+        System.out.println("size : " + size);
+        System.out.println("기준 위도 : " + lat + ", 기준 경도 : " + lon + ", 범위(km) : " + range);
+        System.out.println("[범위 안에 속하는 지역]");
+        for(int i = 0; i < resultList.size(); i++) {
+            System.out.println(resultList.get(i));
         }
-        int size;
-        if(!locationDomains.isEmpty()) // null 고려되는지 확인
-            return locationDomains.size();
-        else
-            return 0;
 
+        return size;
 
     }
 

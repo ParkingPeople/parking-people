@@ -20,7 +20,7 @@ public class PointController {
         return pointService.save(name, lon, lat);
     }
 
-//    http://localhost:8080/point/near?lon=129.086301&lat=35.212670&range=10
+//    http://localhost:8080/point/near?lon=129.086301&lat=35.220105&range=2
     @GetMapping("near")
     public int getNearByLocationDomains(@RequestParam("lon") double lon, @RequestParam("lat") double lat, @RequestParam("range") double range){
         return pointService.getNearByLocationDomains(lat, lon, range);
