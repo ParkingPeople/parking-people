@@ -10,15 +10,15 @@ import org.locationtech.jts.geom.Point;
 @Entity
 @Getter
 @Setter
-public class LocationDomain {
+public class ParkingLotLocation {
 
     @Id @GeneratedValue
-    @Column(name = "location_domain_id")
-    //@OneToOne(mappedBy = "location", fetch = FetchType.LAZY) //TODO @OneToOne일 경우, Long 또는 int를 못 받아서 다른걸로 해야 할거 같아요
+    @Column(name = "parking_lot_location_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private LocationType type;
+//    PakringLot에 type이 있는데 중복?
+//    @Enumerated(EnumType.STRING)
+//    private ?? type;
 
     private String name;
 
@@ -27,5 +27,12 @@ public class LocationDomain {
     private Point coordinates;
 
     private String address_old;
+
+    // 양방향
+//    @OneToOne(mappedBy = "locationDomain")
+//    private ParkingLot parkingLot;
+//
+//    @OneToOne(mappedBy = "locationDomain")
+//    private TrafficData trafficData;
 
 }

@@ -16,7 +16,7 @@ public class PointHistory {
     private Long earned;
 
     @Enumerated(EnumType.STRING)
-    private PointReason reason;
+    private PointReason pointReason; // erd에는 reason인데 구체적으로 바꿈
 
     private String reference;
 

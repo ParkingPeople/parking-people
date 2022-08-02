@@ -18,10 +18,10 @@ public class User {
 
     private Long point;
 
-    @OneToMany(mappedBy = "submitter")
-    List<PhotoSubmission> submissions;
-
-    @OneToMany(mappedBy = "user")
-    List<PointHistory> point_history;
-
+    //양방향
+//    @OneToMany(mappedBy = "user")
+//    List<PointHistory> point_history = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "submitter")
+//    List<PhotoSubmission> photo_submission = new ArrayList<>();
 }

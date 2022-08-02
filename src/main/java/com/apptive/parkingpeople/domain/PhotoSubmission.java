@@ -22,9 +22,10 @@ public class PhotoSubmission {
     private Timestamp taken_at;
 
     @Enumerated(EnumType.STRING)
-    private AnalysisState state;
+    private PhotoState photoState; // erd에는 state인데 구체적으로 바꿈
 
-    @OneToMany(mappedBy = "submission")
-    private List<PhotoResult> photo_results;
+    // 양방향
+//    @OneToMany(mappedBy = "submission")
+//    private List<PhotoResult> photo_results;
 
 }
