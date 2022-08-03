@@ -10,15 +10,11 @@ import org.locationtech.jts.geom.Point;
 @Entity
 @Getter
 @Setter
-public class ParkingLotLocation {
+public class Location {
 
     @Id @GeneratedValue
-    @Column(name = "parking_lot_location_id")
+    @Column(name = "location_id")
     private Long id;
-
-//    PakringLot에 type이 있는데 중복?
-//    @Enumerated(EnumType.STRING)
-//    private ?? type;
 
     private String name;
 
@@ -29,10 +25,10 @@ public class ParkingLotLocation {
     private String address_old;
 
     // 양방향
-//    @OneToOne(mappedBy = "locationDomain")
+//    @OneToOne(mappedBy = "location")
 //    private ParkingLot parkingLot;
 //
-//    @OneToOne(mappedBy = "locationDomain")
+//    @OneToOne(mappedBy = "location")
 //    private TrafficData trafficData;
 
 }

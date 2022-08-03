@@ -2,8 +2,8 @@ package com.apptive.parkingpeople.vo;
 
 public class GeometryUtil {
 
-    public static Location calculate(Double baseLatitude, Double baseLongitude, Double distance,
-                                     Double bearing) {
+    public static LocationPoint calculate(Double baseLatitude, Double baseLongitude, Double distance,
+                                          Double bearing) {
         Double radianLatitude = toRadian(baseLatitude);
         Double radianLongitude = toRadian(baseLongitude);
         Double radianAngle = toRadian(bearing);
@@ -15,7 +15,7 @@ public class GeometryUtil {
                 cos(radianLatitude), cos(distanceRadius) - sin(radianLatitude) * sin(latitude));
 
         longitude = normalizeLongitude(longitude);
-        return new Location(toDegree(latitude), toDegree(longitude));
+        return new LocationPoint(toDegree(latitude), toDegree(longitude));
     }
 
     private static Double toRadian(Double coordinate) {

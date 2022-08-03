@@ -35,10 +35,10 @@ public class ParkingLot {
     private LocalTime closes_at_holidays;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "parking_lot_location_id", nullable = false)
-    private ParkingLotLocation parkingLotLocation;
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
-    // UK를 사용해야 하는 이유?
+    // 주차장 번호
     private String external_id;
 
     private Long base_fee;

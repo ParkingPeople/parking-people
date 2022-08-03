@@ -11,8 +11,8 @@ public class TrafficData {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "parking_lot_location_id", nullable = false)
-    private ParkingLotLocation parkingLotLocation;
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
     private float congestion;
 

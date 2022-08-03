@@ -1,10 +1,10 @@
 package com.apptive.parkingpeople.service;
 
-import com.apptive.parkingpeople.domain.ParkingLotLocation;
+import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.repository.ParkingLotLocationRepository;
 import com.apptive.parkingpeople.vo.Direction;
 import com.apptive.parkingpeople.vo.GeometryUtil;
-import com.apptive.parkingpeople.vo.Location;
+import com.apptive.parkingpeople.vo.LocationPoint;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
@@ -31,7 +31,7 @@ public class PointService {
 
         // WKTReader를 통한 WKT를 실제 타입으로 변환
         Point point = (Point) new WKTReader().read(pointWKT);
-        ParkingLotLocation location = new ParkingLotLocation();
+        Location location = new Location();
         location.setName(name);
         location.setCoordinates(point);
 
@@ -43,9 +43,9 @@ public class PointService {
     @Transactional(readOnly = true)
     public int getNearByLocationDomains(double lat, double lon, double range){
         //ran -> km 단위
-        Location northEast = GeometryUtil
+        LocationPoint northEast = GeometryUtil
                 .calculate(lat, lon, range, Direction.NORTHEAST.getBearing());
-        Location southWest = GeometryUtil
+        LocationPoint southWest = GeometryUtil
                 .calculate(lat, lon, range, Direction.SOUTHWEST.getBearing());
 
         double x1 = northEast.getLatitude();
@@ -57,7 +57,7 @@ public class PointService {
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f, %f %f, %f %f)')", y2, x2, y1, x2, y1, x1, y2, x1);
 
         Query query = em.createNativeQuery("SELECT name "
-                + "FROM location_domain "
+                + "FROM location "
                 + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)");
 
         List resultList = query.getResultList();
