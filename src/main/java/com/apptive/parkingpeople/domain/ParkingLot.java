@@ -1,5 +1,8 @@
 package com.apptive.parkingpeople.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,11 +10,17 @@ import java.time.LocalTime;
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 public class ParkingLot {
 
     @Id @GeneratedValue
     @Column(name = "parking_lot_id")
     private Long id;
+
+    // 주차장 이름으로 등록을 해야 할거 같은데, 일단 erd에는 없음. 이거 확인하기.
+    @Column(unique = true)
+    private String name;
 
     // 주차장 유형
     @Enumerated(EnumType.STRING)
