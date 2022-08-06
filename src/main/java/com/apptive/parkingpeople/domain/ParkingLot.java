@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -88,4 +89,8 @@ public class ParkingLot {
     // 양방향
 //    @OneToMany(mappedBy = "lot")
 //    private List<AvailabilityGuess> availability_guesses;
+//
+//    @OneToMany(mappedBy = "lot")
+//    private List<PhotoSubmission> photo_submissions;
+
 }

@@ -25,4 +25,8 @@ public class PointController {
     public int getNearByLocationDomains(@RequestParam("lon") double lon, @RequestParam("lat") double lat, @RequestParam("range") double range){
         return pointService.getNearByLocationDomains(lat, lon, range);
     }
+
+    // 범위 안에 있는 주차장 다 들고 오고
+    // '여유' 중에 목적지와 거리 가까운거 // '보통' 중에 목적지와 거리 가까운거 // '혼잡'중에 목적지와 거리 가까운거 // 순서로 정렬
+    // 아니면 5개 쌓이면 바로 return 해도 되고
 }
