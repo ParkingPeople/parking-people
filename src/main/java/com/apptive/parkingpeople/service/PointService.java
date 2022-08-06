@@ -1,7 +1,7 @@
 package com.apptive.parkingpeople.service;
 
-import com.apptive.parkingpeople.domain.Location;
-import com.apptive.parkingpeople.repository.ParkingLotLocationRepository;
+import com.apptive.parkingpeople.repository.LocationRepository;
+import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.vo.Direction;
 import com.apptive.parkingpeople.vo.GeometryUtil;
 import com.apptive.parkingpeople.vo.LocationPoint;
@@ -22,7 +22,7 @@ import java.util.List;
 public class PointService {
 
     @Autowired
-    ParkingLotLocationRepository parkingLotLocationRepository;
+    LocationRepository locationRepository;
 
     private final EntityManager em;
 
@@ -31,11 +31,11 @@ public class PointService {
 
         // WKTReader를 통한 WKT를 실제 타입으로 변환
         Point point = (Point) new WKTReader().read(pointWKT);
-        Location location = new Location();
+        com.apptive.parkingpeople.domain.Location location = new com.apptive.parkingpeople.domain.Location();
         location.setName(name);
         location.setCoordinates(point);
 
-        parkingLotLocationRepository.save(location);
+        locationRepository.save(location);
 
         return "good";
     }
