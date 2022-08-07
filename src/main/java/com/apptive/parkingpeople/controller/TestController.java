@@ -6,6 +6,7 @@ import com.apptive.parkingpeople.domain.PhotoState;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import com.apptive.parkingpeople.repository.PhotoSubmissionRepository;
+import com.apptive.parkingpeople.service.ParkingLotService;
 import com.apptive.parkingpeople.service.TrafficCongestionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.locationtech.jts.geom.Point;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/test")
@@ -38,6 +41,8 @@ public class TestController {
     ParkingLotRepository parkingLotRepository;
     @Autowired
     PhotoSubmissionRepository photoSubmissionRepository;
+    @Autowired
+    ParkingLotService parkingLotService;
 
     @GetMapping("lot")
     public String parkingLot(@RequestParam("lat") double lat, @RequestParam("lon") double lon, @RequestParam("name") String name) throws ParseException {
@@ -76,10 +81,18 @@ public class TestController {
         }
         System.out.println("here0 : " + p.getName());
         photoSubmission.setLot(p);
+        photoSubmission.setTaken_at(LocalDateTime.now());
         System.out.println("here1 : " + photoSubmission.getPhotoState());
         System.out.println("here2 : " + photoSubmission.getLot().getName());
         photoSubmissionRepository.save(photoSubmission);
 
         return "success";
+    }
+
+    @GetMapping("compare")
+    public void compare(@RequestParam("name") String name){
+        ParkingLot p = parkingLotRepository.findByName(name);
+        parkingLotService.setParkingLotState(p);
+        return;
     }
 }
