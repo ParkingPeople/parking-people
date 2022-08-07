@@ -23,6 +23,10 @@ public class ParkingLot {
     @Column(unique = true)
     private String name;
 
+    //
+    @Enumerated(EnumType.STRING)
+    private PhotoState state;
+
     // 주차장 유형
     @Enumerated(EnumType.STRING)
     private ParkingLotType parkingLotType; // erd에서는 type으로 표기되어 있음
@@ -90,7 +94,7 @@ public class ParkingLot {
 //    @OneToMany(mappedBy = "lot")
 //    private List<AvailabilityGuess> availability_guesses;
 //
-//    @OneToMany(mappedBy = "lot")
-//    private List<PhotoSubmission> photo_submissions;
+    @OneToMany(mappedBy = "lot")
+    private List<PhotoSubmission> photo_submissions;
 
 }

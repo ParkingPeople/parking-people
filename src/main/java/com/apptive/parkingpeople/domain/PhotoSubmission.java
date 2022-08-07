@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class PhotoSubmission {
     @JoinColumn(name = "parking_lot_id") // , nullable = false
     private ParkingLot lot;
 
-    private Timestamp taken_at;
+    private LocalDateTime taken_at;
 
     @Enumerated(EnumType.STRING)
     private PhotoState photoState; // erd에는 state인데 구체적으로 바꿈

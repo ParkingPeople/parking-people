@@ -1,5 +1,6 @@
 package com.apptive.parkingpeople.service;
 
+import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.vo.Direction;
@@ -56,7 +57,7 @@ public class PointService {
 //        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2); // 점 2개로도 할 수 있는 듯
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f, %f %f, %f %f)')", y2, x2, y1, x2, y1, x1, y2, x1);
 
-        Query query = em.createNativeQuery("SELECT name "
+        Query query = em.createNativeQuery("SELECT location_id "
                 + "FROM location "
                 + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)");
 
@@ -68,6 +69,7 @@ public class PointService {
         for(int i = 0; i < resultList.size(); i++) {
             System.out.println(resultList.get(i));
         }
+
 
         return size;
 
