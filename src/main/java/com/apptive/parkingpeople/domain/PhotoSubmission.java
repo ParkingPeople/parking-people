@@ -27,10 +27,16 @@ public class PhotoSubmission {
     private LocalDateTime taken_at;
 
     @Enumerated(EnumType.STRING)
-    private ActivityLevel photoState; // erd에는 state인데 구체적으로 바꿈
+    private TaskStatus submissionState; // erd에는 state인데 구체적으로 바꿈
 
+    // TODO: restore jpa relation
     // 양방향
-//    @OneToMany(mappedBy = "submission")
-//    private List<PhotoResult> photo_results;
+    // @OneToMany(mappedBy = "submission")
+    private List<PhotoResult> photo_results;
+
+    public PhotoResult getPreferredResult() {
+        // TODO: get default preferred result or throw if none were fit
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 
 }

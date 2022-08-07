@@ -2,13 +2,17 @@ package com.apptive.parkingpeople.service;
 
 import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
+import com.apptive.parkingpeople.domain.PhotoResult;
 import com.apptive.parkingpeople.domain.ActivityLevel;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
+import com.apptive.parkingpeople.domain.interfaces.Converter;
 import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import com.apptive.parkingpeople.vo.Direction;
 import com.apptive.parkingpeople.vo.GeometryUtil;
 import com.apptive.parkingpeople.vo.LocationPoint;
+
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,35 +107,59 @@ public class ParkingLotService {
         float avg = 0;
         int count = 0;
 
-        for(PhotoSubmission i : photo_submissions){
-            LocalDateTime data = i.getTaken_at();
+        for(PhotoSubmission submission : photo_submissions){
+            LocalDateTime data = submission.getTaken_at();
             LocalDateTime now = LocalDateTime.now();
 
             if(ChronoUnit.DAYS.between(data, now) < 1){
-                count++;
-                if(i.getPhotoState() == ActivityLevel.FREE){
-                    total += 0.0f;
-                }else if(i.getPhotoState() == ActivityLevel.NORMAL){
-                    total += 1.0f;
-                }else if(i.getPhotoState() == ActivityLevel.CROWDED){
-                    total += 2.0f;
+                // TODO: limit result by time or filter by prefered model id
+                for (PhotoResult result: submission.getPhoto_results()) {
+                    count++;
+                    final ActivityLevel level = result.getActivityLevel();
+                    // OR
+                    // final ActivityLevel level = getActivityLevelFrom(result);
+                    if(level == ActivityLevel.FREE){
+                        total += 0.0f;
+                    }else if(level == ActivityLevel.NORMAL){
+                        total += 1.0f;
+                    }else if(level == ActivityLevel.CROWDED){
+                        total += 2.0f;
+                    }
                 }
             }
         }
         if(count == 0) {
-            parkingLot.setState(ActivityLevel.UNKNOWN);
+            parkingLot.setActivityLevel(ActivityLevel.UNKNOWN);
         }else {
 
             avg = total / count;
             if (avg < 0.5) {
-                parkingLot.setState(ActivityLevel.FREE);
+                parkingLot.setActivityLevel(ActivityLevel.FREE);
             } else if (avg < 1.5) {
-                parkingLot.setState(ActivityLevel.NORMAL);
+                parkingLot.setActivityLevel(ActivityLevel.NORMAL);
             } else {
-                parkingLot.setState(ActivityLevel.CROWDED);
+                parkingLot.setActivityLevel(ActivityLevel.CROWDED);
             }
         }
-        parkingLotRepository.save(parkingLot); // 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
+        parkingLotRepository.save(parkingLot); // FIXME: 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
         return;
+    }
+
+    private ActivityLevel getActivityLevelFrom(PhotoResult result) {
+        return ActivityLevelConverter.instance.convert(result.getEmptiness());
+    }
+
+    static final class ActivityLevelConverter implements Converter<Float, ActivityLevel> {
+
+        private ActivityLevelConverter() {}
+
+        public static ActivityLevelConverter instance = new ActivityLevelConverter();
+
+        @Override
+        public @NonNull ActivityLevel convert(@NonNull Float emptiness) {
+            // TODO: implement this
+            throw new UnsupportedOperationException("Not implemented yet");
+        }
+
     }
 }

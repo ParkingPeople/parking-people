@@ -2,7 +2,10 @@ package com.apptive.parkingpeople.domain;
 
 import javax.persistence.*;
 
+import lombok.Data;
+
 @Entity
+@Data
 public class PhotoResult {
 
     @Id @GeneratedValue
@@ -16,5 +19,8 @@ public class PhotoResult {
     private Long model_version;
 
     private float emptiness;
+
+    @Enumerated(EnumType.STRING)
+    private ActivityLevel activityLevel; // erd에는 state인데 구체적으로 바꿈
 
 }
