@@ -27,7 +27,7 @@ public class PhotoSubmission {
     private LocalDateTime taken_at;
 
     @Enumerated(EnumType.STRING)
-    private PhotoState photoState; // erd에는 state인데 구체적으로 바꿈
+    private ActivityLevel photoState; // erd에는 state인데 구체적으로 바꿈
 
     // 양방향
 //    @OneToMany(mappedBy = "submission")

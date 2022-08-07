@@ -25,7 +25,7 @@ public class ParkingLot {
 
     //
     @Enumerated(EnumType.STRING)
-    private PhotoState state;
+    private ActivityLevel state;
 
     // 주차장 유형
     @Enumerated(EnumType.STRING)

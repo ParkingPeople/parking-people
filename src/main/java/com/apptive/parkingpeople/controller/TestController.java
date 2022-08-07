@@ -2,7 +2,7 @@ package com.apptive.parkingpeople.controller;
 
 import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
-import com.apptive.parkingpeople.domain.PhotoState;
+import com.apptive.parkingpeople.domain.ActivityLevel;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import com.apptive.parkingpeople.repository.PhotoSubmissionRepository;
@@ -71,13 +71,13 @@ public class TestController {
         // PhotoSubmission
         PhotoSubmission photoSubmission = new PhotoSubmission();
         if(state == 0) {
-            photoSubmission.setPhotoState(PhotoState.FREE);
+            photoSubmission.setPhotoState(ActivityLevel.FREE);
         }
         else if (state == 1) {
-            photoSubmission.setPhotoState(PhotoState.NORMAL);
+            photoSubmission.setPhotoState(ActivityLevel.NORMAL);
         }
         else {
-            photoSubmission.setPhotoState(PhotoState.CROWDED);
+            photoSubmission.setPhotoState(ActivityLevel.CROWDED);
         }
         System.out.println("here0 : " + p.getName());
         photoSubmission.setLot(p);

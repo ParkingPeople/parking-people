@@ -2,7 +2,7 @@ package com.apptive.parkingpeople.service;
 
 import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
-import com.apptive.parkingpeople.domain.PhotoState;
+import com.apptive.parkingpeople.domain.ActivityLevel;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
 import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
@@ -109,26 +109,26 @@ public class ParkingLotService {
 
             if(ChronoUnit.DAYS.between(data, now) < 1){
                 count++;
-                if(i.getPhotoState() == PhotoState.FREE){
+                if(i.getPhotoState() == ActivityLevel.FREE){
                     total += 0.0f;
-                }else if(i.getPhotoState() == PhotoState.NORMAL){
+                }else if(i.getPhotoState() == ActivityLevel.NORMAL){
                     total += 1.0f;
-                }else if(i.getPhotoState() == PhotoState.CROWDED){
+                }else if(i.getPhotoState() == ActivityLevel.CROWDED){
                     total += 2.0f;
                 }
             }
         }
         if(count == 0) {
-            parkingLot.setState(PhotoState.NONE);
+            parkingLot.setState(ActivityLevel.UNKNOWN);
         }else {
 
             avg = total / count;
             if (avg < 0.5) {
-                parkingLot.setState(PhotoState.FREE);
+                parkingLot.setState(ActivityLevel.FREE);
             } else if (avg < 1.5) {
-                parkingLot.setState(PhotoState.NORMAL);
+                parkingLot.setState(ActivityLevel.NORMAL);
             } else {
-                parkingLot.setState(PhotoState.CROWDED);
+                parkingLot.setState(ActivityLevel.CROWDED);
             }
         }
         parkingLotRepository.save(parkingLot); // 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
