@@ -1,7 +1,7 @@
 package com.apptive.parkingpeople.service;
 
+import com.apptive.parkingpeople.service.util.GeometryUtil;
 import com.apptive.parkingpeople.vo.Direction;
-import com.apptive.parkingpeople.vo.GeometryUtil;
 import com.apptive.parkingpeople.vo.LocationPoint;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.locationtech.jts.geom.Point;

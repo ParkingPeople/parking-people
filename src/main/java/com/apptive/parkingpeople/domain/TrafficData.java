@@ -1,8 +1,12 @@
 package com.apptive.parkingpeople.domain;
 
 import javax.persistence.*;
+
+import lombok.Data;
+
 import java.sql.Timestamp;
 
+@Data
 @Entity
 public class TrafficData {
 
