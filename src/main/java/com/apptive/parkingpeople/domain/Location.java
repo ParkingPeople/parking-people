@@ -1,15 +1,18 @@
 package com.apptive.parkingpeople.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.locationtech.jts.geom.Point;
 
+import lombok.Data;
 
+
+@Data
 @Entity
-@Getter
-@Setter
 public class Location {
 
     @Id @GeneratedValue

@@ -43,14 +43,14 @@ public class UserController {
     }
 
     @PostMapping("/user/test") //WebSecurityConfig를 통해서 /user/**에 대해서는 USER라는 권한이 있는지 체크하도록 했음. // 회원가입하면 자동으로 USER 권한이 부여됨
-    public Map userResponseTest() {
+    public Map<?, ?> userResponseTest() {
         Map<String, String> result = new HashMap<>();
         result.put("result","user ok");
         return result;
     }
 
     @PostMapping("/admin/test") //WebSecurityConfig를 통해서 /admin/**에 대해서는 ADMIN라는 권한이 있는지 체크하도록 했음. // 회원가입시 USER권한이 부여되므로 여기에는 USER로 접근 불가
-    public Map adminResponseTest() {
+    public Map<?, ?> adminResponseTest() {
         Map<String, String> result = new HashMap<>();
         result.put("result","admin ok");
         return result;

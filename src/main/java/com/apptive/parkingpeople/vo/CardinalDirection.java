@@ -1,7 +1,5 @@
 package com.apptive.parkingpeople.vo;
 
-import static java.lang.Math.PI;
-
 import lombok.Getter;
 
 @Getter

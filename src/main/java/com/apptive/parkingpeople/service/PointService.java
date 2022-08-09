@@ -1,12 +1,10 @@
 package com.apptive.parkingpeople.service;
 
-import com.apptive.parkingpeople.domain.Location;
-import com.apptive.parkingpeople.repository.LocationRepository;
-import com.apptive.parkingpeople.repository.LocationRepository;
-import com.apptive.parkingpeople.vo.Direction;
-import com.apptive.parkingpeople.vo.GeometryUtil;
-import com.apptive.parkingpeople.vo.LocationPoint;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
@@ -14,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
+import com.apptive.parkingpeople.repository.LocationRepository;
+import com.apptive.parkingpeople.service.util.GeometryUtil;
+import com.apptive.parkingpeople.vo.Direction;
+import com.apptive.parkingpeople.vo.LocationPoint;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +62,7 @@ public class PointService {
                 + "FROM location "
                 + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)");
 
-        List resultList = query.getResultList();
+        List<?> resultList = query.getResultList();
         int size = resultList.size();
         System.out.println("size : " + size);
         System.out.println("기준 위도 : " + lat + ", 기준 경도 : " + lon + ", 범위(km) : " + range);

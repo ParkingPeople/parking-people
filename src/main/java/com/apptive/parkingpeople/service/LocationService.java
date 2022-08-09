@@ -1,8 +1,9 @@
 package com.apptive.parkingpeople.service;
 
 import com.apptive.parkingpeople.domain.Location;
+import com.apptive.parkingpeople.service.util.GeometryUtil;
+import com.apptive.parkingpeople.service.util.TypeUtil;
 import com.apptive.parkingpeople.vo.Direction;
-import com.apptive.parkingpeople.vo.GeometryUtil;
 import com.apptive.parkingpeople.vo.LocationPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class LocationService {
                 + "FROM location as l "
                 + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)", Location.class);
 
-        List<Location> resultList = query.getResultList();
+        List<Location> resultList = TypeUtil.castList(Location.class, query.getResultList());
 
         return resultList;
     }

@@ -1,31 +1,27 @@
 package com.apptive.parkingpeople.service;
 
-import com.apptive.parkingpeople.domain.Location;
-import com.apptive.parkingpeople.domain.ParkingLot;
-import com.apptive.parkingpeople.domain.PhotoResult;
-import com.apptive.parkingpeople.domain.ActivityLevel;
-import com.apptive.parkingpeople.domain.PhotoSubmission;
-import com.apptive.parkingpeople.domain.interfaces.Converter;
-import com.apptive.parkingpeople.repository.LocationRepository;
-import com.apptive.parkingpeople.repository.ParkingLotRepository;
-import com.apptive.parkingpeople.vo.Direction;
-import com.apptive.parkingpeople.vo.GeometryUtil;
-import com.apptive.parkingpeople.vo.LocationPoint;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.apptive.parkingpeople.domain.ActivityLevel;
+import com.apptive.parkingpeople.domain.Location;
+import com.apptive.parkingpeople.domain.ParkingLot;
+import com.apptive.parkingpeople.domain.PhotoResult;
+import com.apptive.parkingpeople.domain.PhotoSubmission;
+import com.apptive.parkingpeople.domain.interfaces.Converter;
+import com.apptive.parkingpeople.repository.LocationRepository;
+import com.apptive.parkingpeople.repository.ParkingLotRepository;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
