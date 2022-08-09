@@ -63,7 +63,7 @@ public class ParkingLot {
     // 공휴일 운영 시작 시간
     private LocalTime opens_at_holidays;
 
-    // 공휴일 운영 종룔 시간
+    // 공휴일 운영 종료 시간
     private LocalTime closes_at_holidays;
 
     // 위도 경도를 Location의 Point에 넣어야 함
@@ -95,7 +95,7 @@ public class ParkingLot {
     // 전화번호
     private String contact; // 이건 머지?
 
-    // 전화 번호
+    // 업로드 날짜
     private LocalDate updated_at;
 
     // 양방향
