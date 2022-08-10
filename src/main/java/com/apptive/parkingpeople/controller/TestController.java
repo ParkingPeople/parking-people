@@ -1,15 +1,7 @@
 package com.apptive.parkingpeople.controller;
 
-import com.apptive.parkingpeople.domain.Location;
-import com.apptive.parkingpeople.domain.ParkingLot;
-import com.apptive.parkingpeople.domain.PhotoResult;
-import com.apptive.parkingpeople.domain.ActivityLevel;
-import com.apptive.parkingpeople.domain.PhotoSubmission;
-import com.apptive.parkingpeople.repository.ParkingLotRepository;
-import com.apptive.parkingpeople.repository.PhotoSubmissionRepository;
-import com.apptive.parkingpeople.service.ParkingLotService;
-import com.apptive.parkingpeople.service.TrafficCongestionService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.time.LocalDateTime;
+
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
@@ -19,7 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import com.apptive.parkingpeople.domain.ActivityLevel;
+import com.apptive.parkingpeople.domain.ParkingLot;
+import com.apptive.parkingpeople.domain.PhotoResult;
+import com.apptive.parkingpeople.domain.PhotoSubmission;
+import com.apptive.parkingpeople.repository.ParkingLotRepository;
+import com.apptive.parkingpeople.repository.PhotoSubmissionRepository;
+import com.apptive.parkingpeople.service.ParkingLotService;
+import com.apptive.parkingpeople.service.TrafficCongestionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @RequestMapping("/test")
@@ -53,9 +53,7 @@ public class TestController {
         String pointWKT = String.format("POINT(%s %s)", lon, lat);
         // WKTReader를 통한 WKT를 실제 타입으로 변환
         Point point = (Point) new WKTReader().read(pointWKT);
-        Location location = new Location();
-        location.setCoordinates(point);
-        p.setLocation(location);
+        p.setCoordinates(point);
         p.setName(name);
 
         parkingLotRepository.save(p);

@@ -3,6 +3,7 @@ package com.apptive.parkingpeople.service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -76,18 +77,21 @@ public class ParkingLotService {
 //        return resultList;
 //    }
 
-    public void updateParkingLotsStateByParkingLots(List<ParkingLot> parkingLots){
+
+
+    public void updateParkingLotsStateByParkingLots(Collection<ParkingLot> parkingLots){
         for(ParkingLot parkingLot : parkingLots){
             setParkingLotState(parkingLot);
         }
         return;
     }
 
+    /**
+     * @deprecated Use {@link #updateParkingLotsStateByParkingLots} instead
+     * @param locations
+     */
+    @Deprecated(forRemoval = true)
     public void updateParkingLotsStateByLocations(List<Location> locations){
-        for(Location location : locations){
-            setParkingLotState(location.getParkingLot());
-            System.out.println("here");
-        }
         return;
     }
 

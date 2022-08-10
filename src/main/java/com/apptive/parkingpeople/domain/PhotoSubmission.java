@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 
@@ -38,7 +39,7 @@ public class PhotoSubmission {
 
     // TODO: restore jpa relation
     // 양방향
-    // @OneToMany(mappedBy = "submission")
+    @OneToMany(mappedBy = "submission")
     private List<PhotoResult> photo_results;
 
     public PhotoResult getPreferredResult() {

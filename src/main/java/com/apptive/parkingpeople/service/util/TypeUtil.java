@@ -3,6 +3,7 @@ package com.apptive.parkingpeople.service.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public final class TypeUtil {
 
@@ -15,6 +16,10 @@ public final class TypeUtil {
       casted.add(innerType.cast(element));
     }
     return casted;
+  }
+
+  public static <T, R> Stream<? extends R> castStream(Stream<? super T> source, Class<R> toType) {
+    return source.filter(o -> toType.isAssignableFrom(o.getClass())).map(o -> toType.cast(o));
   }
 
 }
