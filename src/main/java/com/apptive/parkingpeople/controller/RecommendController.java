@@ -6,6 +6,7 @@ import com.apptive.parkingpeople.service.LocationService;
 import com.apptive.parkingpeople.service.ParkingLotService;
 import com.apptive.parkingpeople.service.TrafficCongestionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ public class RecommendController {
 
         // 4. 거리와 state를 이용하여 정렬
 
-        return "success";
+        String tmp = String.format("범위 안에 있는 주차장의 개수 : %d", locationsWithinRange.size());
+        return tmp;
     }
 }

@@ -1,7 +1,6 @@
 package com.apptive.parkingpeople.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import lombok.Data;
 
@@ -37,14 +35,15 @@ public class PhotoSubmission {
     @Enumerated(EnumType.STRING)
     private TaskStatus submissionState; // erd에는 state인데 구체적으로 바꿈
 
-    // TODO: restore jpa relation
-    // 양방향
-    @OneToMany(mappedBy = "submission")
-    private List<PhotoResult> photo_results;
+    @Enumerated(EnumType.STRING)
+    private ActivityLevel photoResult;
 
-    public PhotoResult getPreferredResult() {
-        // TODO: get default preferred result or throw if none were fit
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    private Long model_version;
+
+    // TODO photoResult로 대신했는데, 혹시나 몰라서 놔뒀습니다. 확인하고 지워주세요
+//    public PhotoResult getPreferredResult() {
+//        // TODO: get default preferred result or throw if none were fit
+//        throw new UnsupportedOperationException("Not implemented yet");
+//    }
 
 }
