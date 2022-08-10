@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/recommend")
@@ -52,7 +53,7 @@ public class RecommendController {
                         .stream()
                         .filter((o) -> o instanceof ParkingLot)
                         .map(o -> (ParkingLot) o)
-                        .toList());
+                        .collect(Collectors.toList()));
 
         // 4. 거리와 state를 이용하여 정렬
 
