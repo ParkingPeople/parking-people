@@ -12,7 +12,13 @@ plugins {
 
 group = 'com.apptive'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+// sourceCompatibility = '11'
+
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+  }
+}
 
 configurations {
 	compileOnly {
@@ -59,10 +65,6 @@ sourceSets {
 	main {
 		java {
 			srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
-
-			toolchain {
-				languageVersion.set(JavaLanguageVersion.of(11))
-			}
 		}
 	}
 }
