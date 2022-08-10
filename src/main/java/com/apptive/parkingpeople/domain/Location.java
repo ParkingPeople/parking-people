@@ -40,19 +40,19 @@ public class Location {
     // @OneToOne(mappedBy = "location")
     // private TrafficData trafficData;
 
-    static final String PARKING_LOT_DV = "1";
-    static final String TRAFFIC_DATA_DV = "2";
+    static private final String _PARKING_LOT_DV = "0";
+    static private final String _TRAFFIC_DATA_DV = "1";
 
     @AllArgsConstructor
     public static enum Type {
-        PARKING_LOT(ParkingLot.class, Location.PARKING_LOT_DV),
-        TRAFFIC_DATA(TrafficData.class, Location.TRAFFIC_DATA_DV);
+        PARKING_LOT(ParkingLot.class, Location._PARKING_LOT_DV),
+        TRAFFIC_DATA(TrafficData.class, Location._TRAFFIC_DATA_DV);
 
         public final Class<?> entityClass;
         public final String discriminatorValue;
 
-        static final String PARKING_LOT_DV = Location.PARKING_LOT_DV;
-        static final String TRAFFIC_DATA_DV = Location.TRAFFIC_DATA_DV;
+        static final String PARKING_LOT_DV = Location._PARKING_LOT_DV;
+        static final String TRAFFIC_DATA_DV = Location._TRAFFIC_DATA_DV;
     }
 
 }
