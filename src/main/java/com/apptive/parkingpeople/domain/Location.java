@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.OneToOne;
 
 import org.locationtech.jts.geom.Point;
 
@@ -34,8 +33,8 @@ public class Location {
     private String address_old;
 
     // 양방향
-    @OneToOne(mappedBy = "location")
-    private ParkingLot parkingLot;
+    // @OneToOne(mappedBy = "location")
+    // private ParkingLot parkingLot;
     //
     // @OneToOne(mappedBy = "location")
     // private TrafficData trafficData;
