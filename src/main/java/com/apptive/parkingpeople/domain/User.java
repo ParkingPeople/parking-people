@@ -44,6 +44,10 @@ public class User implements UserDetails {
     @Column(length = 300, nullable = false)
     private String password;
 
+    private String username;
+
+    private Long point;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
@@ -75,9 +79,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    private String username;
 
-    private Long point;
 
     //양방향
 //    @OneToMany(mappedBy = "user")

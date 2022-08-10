@@ -5,7 +5,7 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -23,5 +23,5 @@ public class TrafficData extends Location {
 
     private float congestion;
 
-    private Timestamp collected_at;
+    private LocalDateTime collected_at;
 }
