@@ -8,7 +8,6 @@ import javax.persistence.Query;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PointService {
 
-    @Autowired
-    LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
     private final EntityManager em;
 
@@ -67,8 +65,8 @@ public class PointService {
         System.out.println("size : " + size);
         System.out.println("기준 위도 : " + lat + ", 기준 경도 : " + lon + ", 범위(km) : " + range);
         System.out.println("[범위 안에 속하는 지역]");
-        for(int i = 0; i < resultList.size(); i++) {
-            System.out.println(resultList.get(i));
+        for (Object o : resultList) {
+            System.out.println(o);
         }
 
 

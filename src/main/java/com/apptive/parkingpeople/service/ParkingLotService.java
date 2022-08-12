@@ -6,42 +6,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apptive.parkingpeople.domain.ActivityLevel;
 import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
-import com.apptive.parkingpeople.domain.interfaces.Converter;
-import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
-
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ParkingLotService {
 
-    // 이거 지워야함
-    @Autowired
-    LocationRepository locationRepository;
+    private final ParkingLotRepository parkingLotRepository;
 
-    @Autowired
-    ParkingLotRepository parkingLotRepository;
-
-    @PersistenceContext
-    private final EntityManager em;
 
     public void updateParkingLotsStateByParkingLots(Collection<ParkingLot> parkingLots){
         for(ParkingLot parkingLot : parkingLots){
             setParkingLotState(parkingLot);
         }
-        return;
     }
 
     /**
@@ -58,11 +42,11 @@ public class ParkingLotService {
     // 0 ~ 0.5 -> FREE, 0.5 ~ 1.5 -> NORMAL, 1.5 ~ 2.0 -> CROWDED
     // 만약에 하루 안에 사진 정보가 없으면 NONE
     public void setParkingLotState(ParkingLot parkingLot){
-        List<PhotoSubmission> photo_submissions = new ArrayList<>(); // 이래야지 nullPointException에 안 걸리는걸로 아는데.. 다시 확인하기.
-        photo_submissions = parkingLot.getPhoto_submissions();
+
+        List<PhotoSubmission> photo_submissions = parkingLot.getPhoto_submissions();
 
         float total = 0;
-        float avg = 0;
+        float avg;
         int count = 0;
 
         for(PhotoSubmission submission : photo_submissions){
@@ -94,7 +78,6 @@ public class ParkingLotService {
             }
         }
         parkingLotRepository.save(parkingLot); // FIXME: 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
-        return;
     }
 
     // TODO photoSubmission 도메인에서 photoResult로 대신했는데, 혹시나 몰라서 놔뒀습니다. 확인하고 지워주세요

@@ -2,7 +2,6 @@ package com.apptive.parkingpeople.controller;
 
 import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
-import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.service.LocationService;
 import com.apptive.parkingpeople.service.ParkingLotService;
 import com.apptive.parkingpeople.service.TrafficCongestionService;
@@ -12,13 +11,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,9 +33,6 @@ public class RecommendController {
 
     private final WalkingTimeService walkingTimeService;
 
-    //TEST
-    private final LocationRepository locationRepository;
-
     // http://localhost:8080/recommend?lon=129.086301&lat=35.220105&range=1000
     @GetMapping("")
     public String recommendParkingLots(@RequestParam("lat") double y, @RequestParam("lon") double x,
@@ -44,8 +40,6 @@ public class RecommendController {
 
         // 1. 베스트 포인트 확인
         Point bestPoint = trafficCongestionService.getBestPointByComparing(y, x, range_km); // lat, lon, range 순순
-        String s = String.format("nw, ne, sw, se 중에서 가장 교통밀집도가 낮은 지역 : lon = %f, lat = %f", bestPoint.getCoordinate().x,
-                bestPoint.getCoordinate().y);
 
         // 2. 베스트 포인트를 이용하여, 구획 내의 주차장 확인
         List<Location> locationsWithinRange = locationService.getLocationsWithinPoint(bestPoint.getCoordinate().y,
@@ -64,11 +58,7 @@ public class RecommendController {
 
         // 4. 각각의 Location(ParkingLot)에 대하여, 보행거리 값 계산.
         // 목적지가 다르고, 그러면 걸리는 시간이 유저마다 다 다르므로, db에 저장하지 않고 메모리에 저장하기.
-        walkingTimeService.setWalkingTime(locationsWithinRange, x, y);
-
-        // TEST // 전체 Location 시간 테스트 // 테스트 케이스 만들었는데, 안되길래 여기서...
-//        List<Location> all = locationRepository.findAll();
-//        walkingTimeService.setWalkingTime(all, x, y);
+        Map<Location, Long> locationAndWalkingTime = walkingTimeService.setWalkingTime(locationsWithinRange, x, y);
 
 
         // 5. '여유, 보통, 혼잡'순으로 정렬된 것에서 '보행시간'이 짧은것 부터 정렬
@@ -76,7 +66,6 @@ public class RecommendController {
 
 
         // tmp값 return
-        String tmp = String.format("범위 안에 있는 주차장의 개수 : %d", locationsWithinRange.size());
-        return tmp;
+        return String.format("범위 안에 있는 주차장의 개수 : %d", locationsWithinRange.size());
     }
 }

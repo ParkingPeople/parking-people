@@ -4,23 +4,19 @@ import com.apptive.parkingpeople.service.util.GeometryUtil;
 import com.apptive.parkingpeople.vo.Direction;
 import com.apptive.parkingpeople.vo.LocationPoint;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class TrafficCongestionService {
 
-    @Autowired
-    TrafficDataService trafficDataService;
-
-    @Value("${tmap-key}")
-    private String tmapKey;
+    private final TrafficDataService trafficDataService;
 
     public Point getBestPointByComparing(double des_lat, double des_lon, double range_km) throws JsonProcessingException, ParseException {
         // 사각형을 4개 그렸을때 그 중점들 까지의 거리이므로 range_km를 반 잘라줘야 함
@@ -57,7 +53,7 @@ public class TrafficCongestionService {
         Point point_se = (Point) new WKTReader().read(pointWKT);
 
 
-        HashMap<Point, Double> map = new HashMap<Point, Double>();
+        HashMap<Point, Double> map = new HashMap<>();
         map.put(point_nw, trafficDataService.getCongestion(north_west_x, north_west_y));
         map.put(point_ne, trafficDataService.getCongestion(north_east_x, north_east_y));
         map.put(point_sw, trafficDataService.getCongestion(south_west_x, south_west_y));

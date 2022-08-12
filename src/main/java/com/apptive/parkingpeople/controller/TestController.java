@@ -3,10 +3,10 @@ package com.apptive.parkingpeople.controller;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,33 +17,28 @@ import com.apptive.parkingpeople.domain.ParkingLot;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import com.apptive.parkingpeople.repository.PhotoSubmissionRepository;
-import com.apptive.parkingpeople.service.ParkingLotService;
 import com.apptive.parkingpeople.service.TrafficCongestionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @RequestMapping("/test")
+@RequiredArgsConstructor
 public class TestController {
 
-    @Autowired
-    TrafficCongestionService trafficCongestionService;
+    private final TrafficCongestionService trafficCongestionService;
 
 
     // http://localhost:8080/test/best_point?lon=129.086301&lat=35.220105&range=10
     @GetMapping("best_point")
     public String test(@RequestParam("lat") double x, @RequestParam("lon") double y, @RequestParam("range") int range) throws ParseException, JsonProcessingException {
         Point bestPoint = trafficCongestionService.getBestPointByComparing(x, y, range);
-        String s = String.format("nw, ne, sw, se 중에서 가장 교통밀집도가 낮은 지역 : lon = %f, lat = %f", bestPoint.getCoordinate().x, bestPoint.getCoordinate().y);
-        return s;
+        return String.format("nw, ne, sw, se 중에서 가장 교통밀집도가 낮은 지역 : lon = %f, lat = %f", bestPoint.getCoordinate().x, bestPoint.getCoordinate().y);
     }
 
     // 지울거라서 일단 여기에 다 해놓음.
-    @Autowired
-    ParkingLotRepository parkingLotRepository;
-    @Autowired
-    PhotoSubmissionRepository photoSubmissionRepository;
-    @Autowired
-    ParkingLotService parkingLotService;
+    private final ParkingLotRepository parkingLotRepository;
+
+    private final PhotoSubmissionRepository photoSubmissionRepository;
 
     @GetMapping("lot")
     public String parkingLot(@RequestParam("lat") double lat, @RequestParam("lon") double lon, @RequestParam("name") String name) throws ParseException {

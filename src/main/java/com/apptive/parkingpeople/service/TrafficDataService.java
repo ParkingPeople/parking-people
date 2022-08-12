@@ -1,6 +1,5 @@
 package com.apptive.parkingpeople.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class TrafficDataService {
@@ -16,9 +16,9 @@ public class TrafficDataService {
     @Value("${tmap-key}")
     private String tmapKey;
 
-    public double getCongestion(double x, double y) throws JsonProcessingException {
+    public double getCongestion(double x, double y) {
 
-        String result = "";
+        String result;
 
         try{
             URL url = new URL("https://apis.openapi.sk.com/tmap/traffic?version=1&" +
@@ -31,7 +31,7 @@ public class TrafficDataService {
 
             BufferedReader bf;
 
-            bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+            bf = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
 
             result = bf.readLine();
 
@@ -42,15 +42,15 @@ public class TrafficDataService {
 
             int count = jsonArray.size();
             float total = 0;
-            float avg = 0;
+            float avg;
 
-            for(int i = 0; i < jsonArray.size(); i ++){
-                JSONObject tmp = (JSONObject) jsonArray.get(i);
+            for (Object o : jsonArray) {
+                JSONObject tmp = (JSONObject) o;
                 JSONObject properties = (JSONObject) tmp.get("properties");
 
                 Object congestionBefore = properties.get("congestion");
-                if(congestionBefore != null){
-                    total += (Long)properties.get("congestion");
+                if (congestionBefore != null) {
+                    total += (Long) properties.get("congestion");
                 }
             }
 
