@@ -58,7 +58,7 @@ public class TrafficDataService {
             return avg;
         }catch (Exception e){
             e.printStackTrace();
-            return 2.5; // FIXME : 문제가 있을때 일단은 평균값(2.5)로 주기. 그래야지 전체 결과에 영향이 제일 적음
+            return 2.0; // FIXME : 문제가 있을때 일단은 평균값(2.5)로 주기. 그래야지 전체 결과에 영향이 제일 적음
         }
     }
 }
