@@ -1,6 +1,7 @@
 package com.apptive.parkingpeople.controller;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apptive.parkingpeople.domain.ActivityLevel;
 import com.apptive.parkingpeople.domain.ParkingLot;
-import com.apptive.parkingpeople.domain.PhotoResult;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import com.apptive.parkingpeople.repository.PhotoSubmissionRepository;
@@ -47,7 +47,12 @@ public class TestController {
 
     @GetMapping("lot")
     public String parkingLot(@RequestParam("lat") double lat, @RequestParam("lon") double lon, @RequestParam("name") String name) throws ParseException {
+
+        Optional<ParkingLot> is_used = parkingLotRepository.findByName(name);
         ParkingLot p = new ParkingLot();
+
+        if(!is_used.isEmpty())
+            p = is_used.get();
 
         // Location
         String pointWKT = String.format("POINT(%s %s)", lon, lat);
@@ -56,46 +61,40 @@ public class TestController {
         p.setCoordinates(point);
         p.setName(name);
 
+        System.out.println("save : " + p.getName());
         parkingLotRepository.save(p);
 
+        if(!is_used.isEmpty())
+            return "주차장 업데이트";
 
-        return "success";
+        return "주차장 등록 완료";
     }
 
     @GetMapping("photo")
     public String photoSubmission(@RequestParam("name") String name, @RequestParam("state") int state){
-        ParkingLot p = parkingLotRepository.findByName(name);
-
+        Optional<ParkingLot> is_used = parkingLotRepository.findByName(name);
+        if(is_used.isEmpty()){
+            return "해당 주차장이 없습니다.";
+        }
+        ParkingLot p = is_used.get();
 
         // PhotoSubmission
         PhotoSubmission photoSubmission = new PhotoSubmission();
-        PhotoResult photoResult = new PhotoResult();
-        photoResult.setSubmission(photoSubmission);
-        if(state == 0) {
-            photoResult.setActivityLevel(ActivityLevel.FREE);
-        }
-        else if (state == 1) {
-            photoResult.setActivityLevel(ActivityLevel.NORMAL);
-        }
-        else {
-            photoResult.setActivityLevel(ActivityLevel.CROWDED);
-        }
-        System.out.println("here0 : " + p.getName());
+
+        if(state == 0)
+            photoSubmission.setPhotoResult(ActivityLevel.FREE);
+        else if(state == 1)
+            photoSubmission.setPhotoResult(ActivityLevel.NORMAL);
+        else if(state == 2)
+            photoSubmission.setPhotoResult(ActivityLevel.CROWDED);
+
         photoSubmission.setLot(p);
         photoSubmission.setTaken_at(LocalDateTime.now());
-        System.out.println("here1 : " + photoResult.getActivityLevel());
-        System.out.println("here2 : " + photoSubmission.getLot().getName());
+
         photoSubmissionRepository.save(photoSubmission);
-        // TODO: implement this
-        // photoResultRepository.save(photoResult);
 
-        return "success";
+        return "주차장 상태(photoResult) 등록";
+
     }
 
-    @GetMapping("compare")
-    public void compare(@RequestParam("name") String name){
-        ParkingLot p = parkingLotRepository.findByName(name);
-        parkingLotService.setParkingLotState(p);
-        return;
-    }
 }
