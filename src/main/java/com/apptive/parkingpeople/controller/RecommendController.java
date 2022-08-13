@@ -56,10 +56,9 @@ public class RecommendController {
 
         parkingLotService.updateParkingLotsStateByParkingLots(parkingLots);
 
-        // 4. 각각의 Location(ParkingLot)에 대하여, 보행거리 값 계산.
+        // 4. 각각의 ParkingLot에 대하여, 보행거리 값 계산.
         // 목적지가 다르고, 그러면 걸리는 시간이 유저마다 다 다르므로, db에 저장하지 않고 메모리에 저장하기.
-        Map<Location, Long> locationAndWalkingTime = walkingTimeService.setWalkingTime(locationsWithinRange, x, y);
-
+        Map<ParkingLot, Long> parkingLotAndWalkingTime = walkingTimeService.setWalkingTime(parkingLots, x, y);
 
         // 5. '여유, 보통, 혼잡'순으로 정렬된 것에서 '보행시간'이 짧은것 부터 정렬
 
