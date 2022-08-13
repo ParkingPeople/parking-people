@@ -1,6 +1,7 @@
 package com.apptive.parkingpeople.controller;
 
 import com.apptive.parkingpeople.domain.Location;
+import com.apptive.parkingpeople.domain.ParkingLot;
 import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import com.apptive.parkingpeople.service.WalkingTimeService;
@@ -40,37 +41,37 @@ class getWalkingTimeTest {
 
         String pointWKT = String.format("POINT(%s %s)", 129.088126, 35.237909);
         Point point = (Point) new WKTReader().read(pointWKT);
-        Location location1 = new Location();
-        location1.setCoordinates(point);
+        ParkingLot parkingLot1 = new ParkingLot();
+        parkingLot1.setCoordinates(point);
 
 
 
         pointWKT = String.format("POINT(%s %s)", 129.089399, 35.229589);
         point = (Point) new WKTReader().read(pointWKT);
-        Location location2 = new Location();
-        location1.setCoordinates(point);
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCoordinates(point);
 
 
         pointWKT = String.format("POINT(%s %s)", 129.086301, 35.220105);
         point = (Point) new WKTReader().read(pointWKT);
-        Location location3 = new Location();
-        location1.setCoordinates(point);
+        ParkingLot parkingLot3 = new ParkingLot();
+        parkingLot1.setCoordinates(point);
 
 
         pointWKT = String.format("POINT(%s %s)", 35.212670, 35.212670);
         point = (Point) new WKTReader().read(pointWKT);
-        Location location4 = new Location();
-        location1.setCoordinates(point);
+        ParkingLot parkingLot4 = new ParkingLot();
+        parkingLot1.setCoordinates(point);
 
         //When
-        List<Location> locations = new ArrayList<>();
-        locations.add(location1);
-        locations.add(location2);
-        locations.add(location3);
-        locations.add(location4);
+        List<ParkingLot> parkingLots = new ArrayList<>();
+        parkingLots.add(parkingLot1);
+        parkingLots.add(parkingLot2);
+        parkingLots.add(parkingLot3);
+        parkingLots.add(parkingLot4);
 
         //Then
-        walkingTimeService.setWalkingTime(locations, 129.086301, 35.220105);
+        walkingTimeService.setWalkingTime(parkingLots, 129.086301, 35.220105);
 
         return "success";
 

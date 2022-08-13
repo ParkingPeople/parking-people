@@ -2,10 +2,9 @@ package com.apptive.parkingpeople.service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
+import com.mysema.commons.lang.Pair;
 import org.springframework.stereotype.Service;
 
 import com.apptive.parkingpeople.domain.ActivityLevel;
@@ -78,6 +77,31 @@ public class ParkingLotService {
             }
         }
         parkingLotRepository.save(parkingLot); // FIXME: 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
+    }
+
+    public List<ParkingLot> prioritizeParkingLotUsingActivityLevelAndWalkingTime(Map<ParkingLot, Long> parkingLots){
+        Vector<Pair<ParkingLot, Long>> weight = new Vector<>();
+        for(Map.Entry<ParkingLot, Long> elem : parkingLots.entrySet()){
+            if(elem.getKey().getActivityLevel().equals(ActivityLevel.FREE)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 0L));
+            }else if(elem.getKey().getActivityLevel().equals(ActivityLevel.NORMAL)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 300L));
+            }else if(elem.getKey().getActivityLevel().equals(ActivityLevel.CROWDED)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 600L));
+            }else if(elem.getKey().getActivityLevel().equals(ActivityLevel.UNKNOWN)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 300L)); // 일단은 NORMAL로 계산
+            }
+        }
+
+        weight.sort(Comparator.comparing(Pair::getSecond));
+
+        List<ParkingLot> bestParkingLots = new ArrayList<>();
+        for(Pair<ParkingLot, Long> it : weight){
+            bestParkingLots.add(it.getFirst());
+            System.out.println("최종 추천 순서 : " + it.getFirst().getName() + ", 최종 가중치 : " + it.getSecond());
+        }
+
+        return bestParkingLots;
     }
 
     // TODO photoSubmission 도메인에서 photoResult로 대신했는데, 혹시나 몰라서 놔뒀습니다. 확인하고 지워주세요

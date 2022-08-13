@@ -60,8 +60,8 @@ public class RecommendController {
         // 목적지가 다르고, 그러면 걸리는 시간이 유저마다 다 다르므로, db에 저장하지 않고 메모리에 저장하기.
         Map<ParkingLot, Long> parkingLotAndWalkingTime = walkingTimeService.setWalkingTime(parkingLots, x, y);
 
-        // 5. '여유, 보통, 혼잡'순으로 정렬된 것에서 '보행시간'이 짧은것 부터 정렬
-
+        // 5. activityLevel(여유, 보통, 혼잡)과 보행자 경로 시간을 이용하여 주차장 추천 순위 정렬
+        List<ParkingLot> bestParkingLots = parkingLotService.prioritizeParkingLotUsingActivityLevelAndWalkingTime(parkingLotAndWalkingTime);
 
 
         // tmp값 return

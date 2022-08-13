@@ -1,6 +1,5 @@
 package com.apptive.parkingpeople.service;
 
-import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -76,7 +75,7 @@ public class WalkingTimeService {
             JSONObject properties = (JSONObject) tmp.get("properties");
             walkingTime = (Long) properties.get("totalTime");
 
-            System.out.println("장소 : " + parkingLot.getName() + ", 걸리는 시간(초) : " + walkingTime);
+            System.out.println("장소 : " + parkingLot.getName() + ", 걸리는 시간(초) : " + walkingTime + ", 상태 :" + parkingLot.getActivityLevel());
             return walkingTime;
 
         }catch(Exception e){
