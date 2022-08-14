@@ -1,93 +1,38 @@
 package com.apptive.parkingpeople.service;
 
-import com.apptive.parkingpeople.domain.Location;
-import com.apptive.parkingpeople.domain.ParkingLot;
-import com.apptive.parkingpeople.domain.PhotoState;
-import com.apptive.parkingpeople.domain.PhotoSubmission;
-import com.apptive.parkingpeople.repository.LocationRepository;
-import com.apptive.parkingpeople.repository.ParkingLotRepository;
-import com.apptive.parkingpeople.vo.Direction;
-import com.apptive.parkingpeople.vo.GeometryUtil;
-import com.apptive.parkingpeople.vo.LocationPoint;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import com.mysema.commons.lang.Pair;
+import org.springframework.stereotype.Service;
+
+import com.apptive.parkingpeople.domain.ActivityLevel;
+import com.apptive.parkingpeople.domain.Location;
+import com.apptive.parkingpeople.domain.ParkingLot;
+import com.apptive.parkingpeople.domain.PhotoSubmission;
+import com.apptive.parkingpeople.repository.ParkingLotRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ParkingLotService {
 
-    // 이거 지워야함
-    @Autowired
-    LocationRepository locationRepository;
+    private final ParkingLotRepository parkingLotRepository;
 
-    @Autowired
-    ParkingLotRepository parkingLotRepository;
 
-    @PersistenceContext
-    private final EntityManager em;
-
-//    @Transactional(readOnly = true)
-//    public List<Location> getParkingLotsWithPoint(double lat, double lon, double range){
-//        // 범위 안에 있는 주차장 일단 다 가져옴
-//        // ran -> km 단위
-//        LocationPoint northEast = GeometryUtil
-//                .calculate(lat, lon, range, Direction.NORTHEAST.getBearing());
-//        LocationPoint southWest = GeometryUtil
-//                .calculate(lat, lon, range, Direction.SOUTHWEST.getBearing());
-//
-//        double ne_y = northEast.getLatitude();
-//        double ne_x = northEast.getLongitude();
-//        double sw_y = southWest.getLatitude();
-//        double sw_x = southWest.getLongitude();
-//
-//        String pointFormat = String.format("'LINESTRING(%f %f, %f %f, %f %f, %f %f)')", sw_x, sw_y, ne_x, sw_y, ne_x, ne_y, sw_x, ne_y);
-//
-//        Query query = em.createNativeQuery("SELECT * "
-//                + "FROM location as l "
-//                + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)", Location.class);
-//
-//        List<Location> resultList = query.getResultList();
-//
-//        System.out.println("범위 안에 있는 주차장 개수 : " + resultList.size());
-//
-//        // 왜 안되지?....
-//        for(Object i : resultList){
-//            System.out.println("test1");
-//            System.out.println(i);
-//        }
-//
-//        // 사이즈는 나오는데 왜 null이 나오지 // 쿼리문에서 Location 자체를 가져와야 할듯
-//        for(int i = 0; i < resultList.size(); i++) {
-//            System.out.println("test2");
-//            System.out.println(resultList.get(i).getParkingLot().getName());
-//        }
-//
-//        return resultList;
-//    }
-
-    public void updateParkingLotsStateByParkingLots(List<ParkingLot> parkingLots){
+    public void updateParkingLotsStateByParkingLots(Collection<ParkingLot> parkingLots){
         for(ParkingLot parkingLot : parkingLots){
             setParkingLotState(parkingLot);
         }
-        return;
     }
 
+    /**
+     * @deprecated Use {@link #updateParkingLotsStateByParkingLots} instead
+     * @param locations
+     */
+    @Deprecated(forRemoval = true)
     public void updateParkingLotsStateByLocations(List<Location> locations){
-        for(Location location : locations){
-            setParkingLotState(location.getParkingLot());
-            System.out.println("here");
-        }
         return;
     }
 
@@ -96,42 +41,85 @@ public class ParkingLotService {
     // 0 ~ 0.5 -> FREE, 0.5 ~ 1.5 -> NORMAL, 1.5 ~ 2.0 -> CROWDED
     // 만약에 하루 안에 사진 정보가 없으면 NONE
     public void setParkingLotState(ParkingLot parkingLot){
-        List<PhotoSubmission> photo_submissions = new ArrayList<>(); // 이래야지 nullPointException에 안 걸리는걸로 아는데.. 다시 확인하기.
-        photo_submissions = parkingLot.getPhoto_submissions();
+
+        List<PhotoSubmission> photo_submissions = parkingLot.getPhoto_submissions();
 
         float total = 0;
-        float avg = 0;
+        float avg;
         int count = 0;
 
-        for(PhotoSubmission i : photo_submissions){
-            LocalDateTime data = i.getTaken_at();
+        for(PhotoSubmission submission : photo_submissions){
+            LocalDateTime data = submission.getTaken_at();
             LocalDateTime now = LocalDateTime.now();
 
             if(ChronoUnit.DAYS.between(data, now) < 1){
+                // TODO: limit result by time or filter by prefered model id
                 count++;
-                if(i.getPhotoState() == PhotoState.FREE){
+                if(submission.getPhotoResult() == ActivityLevel.FREE)
                     total += 0.0f;
-                }else if(i.getPhotoState() == PhotoState.NORMAL){
+                else if(submission.getPhotoResult() == ActivityLevel.NORMAL)
                     total += 1.0f;
-                }else if(i.getPhotoState() == PhotoState.CROWDED){
+                else if(submission.getPhotoResult() == ActivityLevel.CROWDED)
                     total += 2.0f;
-                }
             }
         }
         if(count == 0) {
-            parkingLot.setState(PhotoState.NONE);
+            parkingLot.setActivityLevel(ActivityLevel.UNKNOWN);
         }else {
 
             avg = total / count;
             if (avg < 0.5) {
-                parkingLot.setState(PhotoState.FREE);
+                parkingLot.setActivityLevel(ActivityLevel.FREE);
             } else if (avg < 1.5) {
-                parkingLot.setState(PhotoState.NORMAL);
+                parkingLot.setActivityLevel(ActivityLevel.NORMAL);
             } else {
-                parkingLot.setState(PhotoState.CROWDED);
+                parkingLot.setActivityLevel(ActivityLevel.CROWDED);
             }
         }
-        parkingLotRepository.save(parkingLot); // 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
-        return;
+        parkingLotRepository.save(parkingLot); // FIXME: 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
     }
+
+    public List<ParkingLot> prioritizeParkingLotUsingActivityLevelAndWalkingTime(Map<ParkingLot, Long> parkingLots){
+        Vector<Pair<ParkingLot, Long>> weight = new Vector<>();
+        for(Map.Entry<ParkingLot, Long> elem : parkingLots.entrySet()){
+            if(elem.getKey().getActivityLevel().equals(ActivityLevel.FREE)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 0L));
+            }else if(elem.getKey().getActivityLevel().equals(ActivityLevel.NORMAL)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 300L));
+            }else if(elem.getKey().getActivityLevel().equals(ActivityLevel.CROWDED)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 600L));
+            }else if(elem.getKey().getActivityLevel().equals(ActivityLevel.UNKNOWN)){
+                weight.add(new Pair<>(elem.getKey(), elem.getValue() + 300L)); // 일단은 NORMAL로 계산
+            }
+        }
+
+        weight.sort(Comparator.comparing(Pair::getSecond));
+
+        List<ParkingLot> bestParkingLots = new ArrayList<>();
+        for(Pair<ParkingLot, Long> it : weight){
+            bestParkingLots.add(it.getFirst());
+            System.out.println("최종 추천 순서 : " + it.getFirst().getName() + ", 최종 가중치 : " + it.getSecond());
+        }
+
+        return bestParkingLots;
+    }
+
+    // TODO photoSubmission 도메인에서 photoResult로 대신했는데, 혹시나 몰라서 놔뒀습니다. 확인하고 지워주세요
+//    private ActivityLevel getActivityLevelFrom(PhotoResult result) {
+//        return ActivityLevelConverter.instance.convert(result.getEmptiness());
+//    }
+
+//    static final class ActivityLevelConverter implements Converter<Float, ActivityLevel> {
+//
+//        private ActivityLevelConverter() {}
+//
+//        public static ActivityLevelConverter instance = new ActivityLevelConverter();
+//
+//        @Override
+//        public @NonNull ActivityLevel convert(@NonNull Float emptiness) {
+//            // TODO: implement this
+//            throw new UnsupportedOperationException("Not implemented yet");
+//        }
+//
+//    }
 }

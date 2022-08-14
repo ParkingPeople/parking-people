@@ -1,8 +1,9 @@
 package com.apptive.parkingpeople.service;
 
 import com.apptive.parkingpeople.domain.Location;
+import com.apptive.parkingpeople.service.util.GeometryUtil;
+import com.apptive.parkingpeople.service.util.TypeUtil;
 import com.apptive.parkingpeople.vo.Direction;
-import com.apptive.parkingpeople.vo.GeometryUtil;
 import com.apptive.parkingpeople.vo.LocationPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,14 @@ public class LocationService {
     private final EntityManager em;
 
     @Transactional(readOnly = true)
-    public List<Location> getLocationsWithinPoint(double lat, double lon, double range){
-        // 범위 안에 있는 주차장 일단 다 가져옴
-        // ran -> km 단위
+    public List<Location> getLocationsWithinPoint(double lat, double lon, double range_km){
+        // 초기 반경안에 있을려면 bestPoint로 부터 range_km/2 의 거리까지 탐색해야함.
+        range_km = range_km / 2;
+
         LocationPoint northEast = GeometryUtil
-                .calculate(lat, lon, range, Direction.NORTHEAST.getBearing());
+                .calculate(lat, lon, range_km, Direction.NORTHEAST.getBearing());
         LocationPoint southWest = GeometryUtil
-                .calculate(lat, lon, range, Direction.SOUTHWEST.getBearing());
+                .calculate(lat, lon, range_km, Direction.SOUTHWEST.getBearing());
 
         double ne_y = northEast.getLatitude();
         double ne_x = northEast.getLongitude();
@@ -40,7 +42,7 @@ public class LocationService {
                 + "FROM location as l "
                 + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)", Location.class);
 
-        List<Location> resultList = query.getResultList();
+        List<Location> resultList = TypeUtil.castList(Location.class, query.getResultList());
 
         return resultList;
     }

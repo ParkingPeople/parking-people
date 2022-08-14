@@ -1,6 +1,10 @@
-package com.apptive.parkingpeople.vo;
+package com.apptive.parkingpeople.service.util;
 
-public class GeometryUtil {
+import com.apptive.parkingpeople.vo.LocationPoint;
+
+public final class GeometryUtil {
+
+    private GeometryUtil() {}
 
     public static LocationPoint calculate(Double baseLatitude, Double baseLongitude, Double distance,
                                           Double bearing) {

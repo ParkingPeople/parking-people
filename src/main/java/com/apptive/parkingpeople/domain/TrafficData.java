@@ -1,10 +1,17 @@
 package com.apptive.parkingpeople.domain;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class TrafficData {
+@DiscriminatorValue(Location.Type.TRAFFIC_DATA_DV)
+public class TrafficData extends Location {
 
     @Id @GeneratedValue
     @Column(name = "traffic_data_id")
@@ -16,5 +23,5 @@ public class TrafficData {
 
     private float congestion;
 
-    private Timestamp collected_at;
+    private LocalDateTime collected_at;
 }

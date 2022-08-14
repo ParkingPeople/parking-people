@@ -1,6 +1,7 @@
 package com.apptive.parkingpeople.controller;
 
 import com.apptive.parkingpeople.service.PointService;
+import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.io.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/point")
+@RequiredArgsConstructor
 public class PointController {
 
-    @Autowired
-    PointService pointService;
+    private final PointService pointService;
 
     @GetMapping("save")
     public String saveLocation(@RequestParam("name") String name, @RequestParam("lon") double lon, @RequestParam("lat") double lat) throws ParseException {

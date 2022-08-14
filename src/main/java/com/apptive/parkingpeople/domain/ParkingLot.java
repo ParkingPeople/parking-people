@@ -1,19 +1,32 @@
 package com.apptive.parkingpeople.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Getter
-@Setter
-public class ParkingLot {
+@DiscriminatorValue(Location.Type.PARKING_LOT_DV)
+public class ParkingLot extends Location {
+
+    public static enum Type {
+        // 노외, 부설, 노상
+        PARKING_LOT, BUILDING, STREET;
+    }
 
     @Id @GeneratedValue
     @Column(name = "parking_lot_id")
@@ -25,11 +38,11 @@ public class ParkingLot {
 
     //
     @Enumerated(EnumType.STRING)
-    private PhotoState state;
+    private ActivityLevel activityLevel;
 
     // 주차장 유형
     @Enumerated(EnumType.STRING)
-    private ParkingLotType parkingLotType; // erd에서는 type으로 표기되어 있음
+    private ParkingLot.Type parkingLotType; // erd에서는 type으로 표기되어 있음
 
     // 주차장 구분
     private boolean is_public;
@@ -55,13 +68,13 @@ public class ParkingLot {
     // 공휴일 운영 시작 시간
     private LocalTime opens_at_holidays;
 
-    // 공휴일 운영 종룔 시간
+    // 공휴일 운영 종료 시간
     private LocalTime closes_at_holidays;
 
     // 위도 경도를 Location의 Point에 넣어야 함
-    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", nullable = false)
-    private Location location;
+    // @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    // @JoinColumn(name = "location_id", nullable = false)
+    // private Location location;
 
     // 주차장 번호
     private String external_id;
@@ -87,7 +100,7 @@ public class ParkingLot {
     // 전화번호
     private String contact; // 이건 머지?
 
-    // 전화 번호
+    // 업로드 날짜
     private LocalDate updated_at;
 
     // 양방향

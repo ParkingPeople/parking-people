@@ -1,21 +1,33 @@
 package com.apptive.parkingpeople.domain;
 
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Entity
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@Entity
 public class User implements UserDetails {
 
     @Id @GeneratedValue
@@ -31,6 +43,10 @@ public class User implements UserDetails {
 
     @Column(length = 300, nullable = false)
     private String password;
+
+    private String username;
+
+    private Long point;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -63,9 +79,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    private String username;
 
-    private Long point;
 
     //양방향
 //    @OneToMany(mappedBy = "user")

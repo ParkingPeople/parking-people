@@ -1,29 +1,28 @@
 package com.apptive.parkingpeople.service;
 
-import com.apptive.parkingpeople.domain.Location;
-import com.apptive.parkingpeople.repository.LocationRepository;
-import com.apptive.parkingpeople.repository.LocationRepository;
-import com.apptive.parkingpeople.vo.Direction;
-import com.apptive.parkingpeople.vo.GeometryUtil;
-import com.apptive.parkingpeople.vo.LocationPoint;
-import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.List;
+
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.apptive.parkingpeople.repository.LocationRepository;
+import com.apptive.parkingpeople.service.util.GeometryUtil;
+import com.apptive.parkingpeople.vo.Direction;
+import com.apptive.parkingpeople.vo.LocationPoint;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class PointService {
 
-    @Autowired
-    LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
     private final EntityManager em;
 
@@ -61,13 +60,13 @@ public class PointService {
                 + "FROM location "
                 + "WHERE MBRContains(GeomFromText(" + pointFormat + ", coordinates)");
 
-        List resultList = query.getResultList();
+        List<?> resultList = query.getResultList();
         int size = resultList.size();
         System.out.println("size : " + size);
         System.out.println("기준 위도 : " + lat + ", 기준 경도 : " + lon + ", 범위(km) : " + range);
         System.out.println("[범위 안에 속하는 지역]");
-        for(int i = 0; i < resultList.size(); i++) {
-            System.out.println(resultList.get(i));
+        for (Object o : resultList) {
+            System.out.println(o);
         }
 
 
