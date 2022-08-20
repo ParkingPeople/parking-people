@@ -1,6 +1,5 @@
 package com.apptive.parkingpeople.controller;
 
-import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
 import com.apptive.parkingpeople.repository.LocationRepository;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
@@ -71,7 +70,7 @@ class getWalkingTimeTest {
         parkingLots.add(parkingLot4);
 
         //Then
-        walkingTimeService.setWalkingTime(parkingLots, 129.086301, 35.220105);
+        walkingTimeService.setWalkingTimeAndDistance(parkingLots, 129.086301, 35.220105);
 
         return "success";
 

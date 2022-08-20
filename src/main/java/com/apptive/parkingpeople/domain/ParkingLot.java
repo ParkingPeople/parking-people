@@ -103,6 +103,11 @@ public class ParkingLot extends Location {
     // 업로드 날짜
     private LocalDate updated_at;
 
+    // 경로 추천시 설정되는 값들(목적지까지의 보행시간, 목적지까지의 거리) // TODO api호출이 안되어서 set을 못하면 nullPointException이 뜨는건가?
+    private Long timeToDes;
+
+    private Long distanceToDes;
+
     // 양방향
 //    @OneToMany(mappedBy = "lot")
 //    private List<AvailabilityGuess> availability_guesses;

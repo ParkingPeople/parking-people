@@ -79,9 +79,15 @@ public class ParkingLotService {
         parkingLotRepository.save(parkingLot); // FIXME: 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
     }
 
-    public List<ParkingLot> prioritizeParkingLotUsingActivityLevelAndWalkingTime(Map<ParkingLot, Long> parkingLots){
+    public List<ParkingLot> prioritizeParkingLotUsingActivityLevelAndWalkingTime(List<ParkingLot> parkingLots){
+        Map<ParkingLot, Long> parkingLotsInMap = new HashMap<>();
+        for(ParkingLot p : parkingLots){
+            parkingLotsInMap.put(p, p.getTimeToDes());
+        }
+
+
         Vector<Pair<ParkingLot, Long>> weight = new Vector<>();
-        for(Map.Entry<ParkingLot, Long> elem : parkingLots.entrySet()){
+        for(Map.Entry<ParkingLot, Long> elem : parkingLotsInMap.entrySet()){
             if(elem.getKey().getActivityLevel().equals(ActivityLevel.FREE)){
                 weight.add(new Pair<>(elem.getKey(), elem.getValue() + 0L));
             }else if(elem.getKey().getActivityLevel().equals(ActivityLevel.NORMAL)){
@@ -100,6 +106,10 @@ public class ParkingLotService {
             bestParkingLots.add(it.getFirst());
             System.out.println("최종 추천 순서 : " + it.getFirst().getName() + ", 최종 가중치 : " + it.getSecond());
         }
+
+        // 일단 5개 이하로 던져주기
+        if(bestParkingLots.size() > 5)
+            bestParkingLots = bestParkingLots.subList(0, 5);
 
         return bestParkingLots;
     }

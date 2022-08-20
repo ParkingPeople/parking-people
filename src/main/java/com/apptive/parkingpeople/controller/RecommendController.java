@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -56,15 +55,18 @@ public class RecommendController {
 
         parkingLotService.updateParkingLotsStateByParkingLots(parkingLots);
 
-        // 4. 각각의 ParkingLot에 대하여, 보행거리 값 계산.
-        // 목적지가 다르고, 그러면 걸리는 시간이 유저마다 다 다르므로, db에 저장하지 않고 메모리에 저장하기.
-        Map<ParkingLot, Long> parkingLotAndWalkingTime = walkingTimeService.setWalkingTime(parkingLots, x, y);
+        // 4. 각각의 ParkingLot에 대하여, 목적지까지의 보행시간과 거리 계산.
+        walkingTimeService.setWalkingTimeAndDistance(parkingLots, x, y);
 
         // 5. activityLevel(여유, 보통, 혼잡)과 보행자 경로 시간을 이용하여 주차장 추천 순위 정렬
-        List<ParkingLot> bestParkingLots = parkingLotService.prioritizeParkingLotUsingActivityLevelAndWalkingTime(parkingLotAndWalkingTime);
+        List<ParkingLot> bestParkingLots = parkingLotService.prioritizeParkingLotUsingActivityLevelAndWalkingTime(parkingLots);
 
+        String tmp = null;
+        for(ParkingLot p : bestParkingLots){
+            tmp += ("이름 : " + p.getName() + ", 혼잡도 " + p.getActivityLevel() + ", 거리 : " + p.getDistanceToDes() + ", 시간 : " + p.getTimeToDes() + "\n");
+        }
 
-        // tmp값 return
-        return String.format("범위 안에 있는 주차장의 개수 : %d", locationsWithinRange.size());
+        // bestParkingLots를 return해서 사용하면 됨.
+        return tmp;
     }
 }
