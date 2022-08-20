@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 @Data
@@ -26,6 +27,7 @@ public class PhotoSubmission {
     @JoinColumn(name = "user_id") // 일단 nullable = false 빼놓음
     private User submitter;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY) //, optional = false
     @JoinColumn(name = "parking_lot_id") // , nullable = false
     private ParkingLot lot;

@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -112,6 +113,8 @@ public class ParkingLot extends Location {
 //    @OneToMany(mappedBy = "lot")
 //    private List<AvailabilityGuess> availability_guesses;
 //
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "lot")
     private List<PhotoSubmission> photo_submissions;
 

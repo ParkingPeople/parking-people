@@ -56,7 +56,8 @@ dependencies {
 			"javax.annotation:javax.annotation-api",
 			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
-
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+//	implementation 'org.n52.jackson:jackson-datatype-jts:1.2.4'
 //	implementation 'org.hibernate.orm:hibernate-spatial:5.6.10.Final'
 }
 

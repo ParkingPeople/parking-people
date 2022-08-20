@@ -1,10 +1,18 @@
 package com.apptive.parkingpeople.service;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import com.apptive.parkingpeople.dto.RecommendResponseDto;
+import com.apptive.parkingpeople.dto.StatusEnum;
 import com.mysema.commons.lang.Pair;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.apptive.parkingpeople.domain.ActivityLevel;
@@ -79,7 +87,7 @@ public class ParkingLotService {
         parkingLotRepository.save(parkingLot); // FIXME: 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
     }
 
-    public List<ParkingLot> prioritizeParkingLotUsingActivityLevelAndWalkingTime(List<ParkingLot> parkingLots){
+    public ResponseEntity<RecommendResponseDto> prioritizeParkingLotUsingActivityLevelAndWalkingTime(List<ParkingLot> parkingLots){
         Map<ParkingLot, Long> parkingLotsInMap = new HashMap<>();
         for(ParkingLot p : parkingLots){
             parkingLotsInMap.put(p, p.getTimeToDes());
@@ -111,7 +119,15 @@ public class ParkingLotService {
         if(bestParkingLots.size() > 5)
             bestParkingLots = bestParkingLots.subList(0, 5);
 
-        return bestParkingLots;
+        RecommendResponseDto recommendResponseDto = new RecommendResponseDto();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        recommendResponseDto.setStatus(StatusEnum.OK);
+        recommendResponseDto.setTotal_count(bestParkingLots.size());
+        recommendResponseDto.setParkingLots(bestParkingLots);
+
+        return new ResponseEntity<>(recommendResponseDto, headers, HttpStatus.OK);
     }
 
     // TODO photoSubmission 도메인에서 photoResult로 대신했는데, 혹시나 몰라서 놔뒀습니다. 확인하고 지워주세요

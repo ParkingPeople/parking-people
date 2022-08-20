@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.locationtech.jts.geom.Point;
 
 import lombok.AllArgsConstructor;
@@ -32,6 +33,8 @@ public class Location {
     private double longitude;
 
     private double latitude;
+
+    @JsonIgnore
     private Point coordinates;
 
 

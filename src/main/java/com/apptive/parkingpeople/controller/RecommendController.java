@@ -2,6 +2,7 @@ package com.apptive.parkingpeople.controller;
 
 import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
+import com.apptive.parkingpeople.dto.RecommendResponseDto;
 import com.apptive.parkingpeople.service.LocationService;
 import com.apptive.parkingpeople.service.ParkingLotService;
 import com.apptive.parkingpeople.service.TrafficCongestionService;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,8 +36,8 @@ public class RecommendController {
 
     // http://localhost:8080/recommend?lon=129.086301&lat=35.220105&range=1000
     @GetMapping("")
-    public String recommendParkingLots(@RequestParam("lat") double y, @RequestParam("lon") double x,
-            @RequestParam("range") double range_km) throws ParseException, JsonProcessingException {
+    public ResponseEntity<RecommendResponseDto> recommendParkingLots(@RequestParam("lat") double y, @RequestParam("lon") double x,
+                                                                     @RequestParam("range") double range_km) throws ParseException, JsonProcessingException {
 
         // 1. 베스트 포인트 확인
         Point bestPoint = trafficCongestionService.getBestPointByComparing(y, x, range_km); // lat, lon, range 순순
@@ -59,14 +61,6 @@ public class RecommendController {
         walkingTimeService.setWalkingTimeAndDistance(parkingLots, x, y);
 
         // 5. activityLevel(여유, 보통, 혼잡)과 보행자 경로 시간을 이용하여 주차장 추천 순위 정렬
-        List<ParkingLot> bestParkingLots = parkingLotService.prioritizeParkingLotUsingActivityLevelAndWalkingTime(parkingLots);
-
-        String tmp = null;
-        for(ParkingLot p : bestParkingLots){
-            tmp += ("이름 : " + p.getName() + ", 혼잡도 " + p.getActivityLevel() + ", 거리 : " + p.getDistanceToDes() + ", 시간 : " + p.getTimeToDes() + "\n");
-        }
-
-        // bestParkingLots를 return해서 사용하면 됨.
-        return tmp;
+        return parkingLotService.prioritizeParkingLotUsingActivityLevelAndWalkingTime(parkingLots);
     }
 }
