@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -98,15 +99,22 @@ public class ParkingLot extends Location {
     private Long monthly_fee;
 
     // 전화번호
-    private String contact; // 이건 머지?
+    private String contact;
 
     // 업로드 날짜
     private LocalDate updated_at;
+
+    // 경로 추천시 설정되는 값들(목적지까지의 보행시간, 목적지까지의 거리) // TODO api호출이 안되어서 set을 못하면 nullPointException이 뜨는건가?
+    private Long timeToDes;
+
+    private Long distanceToDes;
 
     // 양방향
 //    @OneToMany(mappedBy = "lot")
 //    private List<AvailabilityGuess> availability_guesses;
 //
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "lot")
     private List<PhotoSubmission> photo_submissions;
 

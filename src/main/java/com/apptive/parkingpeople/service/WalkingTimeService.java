@@ -11,9 +11,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -22,12 +20,10 @@ public class WalkingTimeService {
     @Value("${tmap-key}")
     private String tmapKey;
 
-    public Map<ParkingLot,Long> setWalkingTime(List<ParkingLot> parkingLots, double endX, double endY){
-        Map<ParkingLot, Long> walkingTimeMap = new HashMap<>();
+    public void setWalkingTimeAndDistance(List<ParkingLot> parkingLots, double endX, double endY){
 
         for (ParkingLot parkingLot : parkingLots) {
-            Long time = getEachWalkingTime(parkingLot, endX, endY);
-            walkingTimeMap.put(parkingLot, time);
+            setEachWalkingTimeAndDistance(parkingLot, endX, endY);
 
             // FIXME 일정 시간 동안 요청 개수 제한이 있는거 같아서, 지연으로 보내는 방법 사용. 제일 짧은 간격이 0.25초
             try {
@@ -37,11 +33,9 @@ public class WalkingTimeService {
             }
 
         }
-
-        return walkingTimeMap;
     }
 
-    public Long getEachWalkingTime(ParkingLot parkingLot, double endX, double endY){
+    public void setEachWalkingTimeAndDistance(ParkingLot parkingLot, double endX, double endY){
 
         String result;
 
@@ -69,19 +63,16 @@ public class WalkingTimeService {
 
             JSONArray jsonArray = (JSONArray) jsonObject.get("features");
 
-            Long walkingTime;
-
             JSONObject tmp = (JSONObject) jsonArray.get(0);
             JSONObject properties = (JSONObject) tmp.get("properties");
-            walkingTime = (Long) properties.get("totalTime");
+            parkingLot.setDistanceToDes((Long) properties.get("totalDistance"));
+            parkingLot.setTimeToDes((Long) properties.get("totalTime"));
 
-            System.out.println("장소 : " + parkingLot.getName() + ", 걸리는 시간(초) : " + walkingTime + ", 상태 :" + parkingLot.getActivityLevel());
-            return walkingTime;
 
         }catch(Exception e){
             System.out.println("확인 불가 장소 : " + parkingLot.getName());
             e.printStackTrace();
-            return 0L; // FIXME '0'을 확인 불가 장소로 인식하게 할지, 아니면 다른 방법이 있는지 생각하기
+            // TODO 호출안된 경우 nullPointException뜨는지 확인
         }
     }
 
