@@ -41,7 +41,14 @@ public class TestController {
     private final PhotoSubmissionRepository photoSubmissionRepository;
 
     @GetMapping("lot")
-    public String parkingLot(@RequestParam("lat") double lat, @RequestParam("lon") double lon, @RequestParam("name") String name) throws ParseException {
+    public String parkingLot(
+            @RequestParam("lat") double lat,
+            @RequestParam("lon") double lon,
+            @RequestParam("name") String name,
+            @RequestParam("address") String address,
+            @RequestParam("base_fee") Long fee,
+            @RequestParam("contact") String contact
+    ) throws ParseException {
 
         Optional<ParkingLot> is_used = parkingLotRepository.findByName(name);
         ParkingLot p = new ParkingLot();
@@ -56,6 +63,10 @@ public class TestController {
         p.setCoordinates(point);
         p.setName(name);
 
+        p.setAddress(address);
+        p.setBase_fee(fee);
+        p.setContact(contact);
+
         System.out.println("save : " + p.getName());
         parkingLotRepository.save(p);
 
@@ -66,7 +77,10 @@ public class TestController {
     }
 
     @GetMapping("photo")
-    public String photoSubmission(@RequestParam("name") String name, @RequestParam("state") int state){
+    public String photoSubmission(
+            @RequestParam("name") String name,
+            @RequestParam("level") int level
+    ){
         Optional<ParkingLot> is_used = parkingLotRepository.findByName(name);
         if(is_used.isEmpty()){
             return "해당 주차장이 없습니다.";
@@ -76,11 +90,11 @@ public class TestController {
         // PhotoSubmission
         PhotoSubmission photoSubmission = new PhotoSubmission();
 
-        if(state == 0)
+        if(level == 0)
             photoSubmission.setPhotoResult(ActivityLevel.FREE);
-        else if(state == 1)
+        else if(level == 1)
             photoSubmission.setPhotoResult(ActivityLevel.NORMAL);
-        else if(state == 2)
+        else if(level == 2)
             photoSubmission.setPhotoResult(ActivityLevel.CROWDED);
 
         photoSubmission.setLot(p);

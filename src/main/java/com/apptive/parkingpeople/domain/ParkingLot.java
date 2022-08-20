@@ -98,7 +98,7 @@ public class ParkingLot extends Location {
     private Long monthly_fee;
 
     // 전화번호
-    private String contact; // 이건 머지?
+    private String contact;
 
     // 업로드 날짜
     private LocalDate updated_at;
