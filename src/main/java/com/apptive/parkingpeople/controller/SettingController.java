@@ -1,8 +1,11 @@
 package com.apptive.parkingpeople.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import com.apptive.parkingpeople.domain.Location;
+import com.apptive.parkingpeople.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
@@ -23,23 +26,34 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor
-public class TestController {
+public class SettingController {
 
     private final TrafficCongestionService trafficCongestionService;
 
+    private final LocationRepository locationRepository;
 
-    // http://localhost:8080/test/best_point?lon=129.086301&lat=35.220105&range=10
-    @GetMapping("best_point")
-    public String test(@RequestParam("lat") double x, @RequestParam("lon") double y, @RequestParam("range") int range) throws ParseException, JsonProcessingException {
-        Point bestPoint = trafficCongestionService.getBestPointByComparing(x, y, range);
-        return String.format("nw, ne, sw, se 중에서 가장 교통밀집도가 낮은 지역 : lon = %f, lat = %f", bestPoint.getCoordinate().x, bestPoint.getCoordinate().y);
-    }
-
-    // 지울거라서 일단 여기에 다 해놓음.
     private final ParkingLotRepository parkingLotRepository;
 
     private final PhotoSubmissionRepository photoSubmissionRepository;
 
+
+    // http://localhost:8080/test/best_point?lon=129.086301&lat=35.220105&range=10
+
+    // 위도와 경도를 가지고 coordinates 업데이트
+    @GetMapping("coordinates")
+    public String setCoordinates() throws ParseException {
+
+        List<Location> all = locationRepository.findAll();
+        System.out.println("location size : " + all.size());
+        for(Location location : all){
+            location.setCoordinates(location.getCoordinates());
+            locationRepository.save(location);
+        }
+
+        return "success";
+    }
+
+    // 주차장 추가
     @GetMapping("lot")
     public String parkingLot(
             @RequestParam("lat") double lat,
@@ -76,6 +90,7 @@ public class TestController {
         return "주차장 등록 완료";
     }
 
+    // 주차장 activity_level 추가
     @GetMapping("photo")
     public String photoSubmission(
             @RequestParam("name") String name,
@@ -104,6 +119,14 @@ public class TestController {
 
         return "주차장 상태(photoResult) 등록";
 
+    }
+
+
+    // 교통혼잡도 확인
+    @GetMapping("best_point")
+    public String test(@RequestParam("lat") double x, @RequestParam("lon") double y, @RequestParam("range") int range) throws ParseException, JsonProcessingException {
+        Point bestPoint = trafficCongestionService.getBestPointByComparing(x, y, range);
+        return String.format("nw, ne, sw, se 중에서 가장 교통밀집도가 낮은 지역 : lon = %f, lat = %f", bestPoint.getCoordinate().x, bestPoint.getCoordinate().y);
     }
 
 }

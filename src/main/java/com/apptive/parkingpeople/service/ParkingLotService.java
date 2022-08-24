@@ -112,7 +112,6 @@ public class ParkingLotService {
         List<ParkingLot> bestParkingLots = new ArrayList<>();
         for(Pair<ParkingLot, Long> it : weight){
             bestParkingLots.add(it.getFirst());
-            System.out.println("최종 추천 순서 : " + it.getFirst().getName() + ", 최종 가중치 : " + it.getSecond());
         }
 
         // 일단 5개 이하로 던져주기
