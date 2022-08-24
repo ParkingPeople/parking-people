@@ -1,6 +1,7 @@
 package com.apptive.parkingpeople.service;
 
 import com.apptive.parkingpeople.domain.ParkingLot;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 public class WalkingTimeService {
 
     @Value("${tmap-key}")
@@ -70,12 +72,11 @@ public class WalkingTimeService {
 
 
         }catch(Exception e){
-            System.out.println("확인 불가 장소 : " + parkingLot.getName());
-            e.printStackTrace();
+            log.warn("'보행 거리 및 시간' 확인 불가 장소 : " + parkingLot.getName());
+            parkingLot.setDistanceToDes(1000L); // FIXME radius를 1km로 선정할거라서 제일 긴 시간으로 일단 놔둠
+            parkingLot.setTimeToDes(750L); // FIXME 1km 걷는데 걸리는 시간으로 설정해놓음. // 12.5분 = 750초
+//            e.printStackTrace();
             // TODO 호출안된 경우 nullPointException뜨는지 확인
         }
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 package com.apptive.parkingpeople.domain;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -42,16 +41,15 @@ public class ParkingLot extends Location {
     private ActivityLevel activityLevel;
 
     // 주차장 유형
-    @Enumerated(EnumType.STRING)
-    private ParkingLot.Type parkingLotType; // erd에서는 type으로 표기되어 있음
+    private String parkingLotType; // erd에서는 type으로 표기되어 있음
 
     // 주차장 구분
-    private boolean is_public;
+    private String is_public;
 
     // 주차장 구획수
     private Long capacity;
 
-    // 급지 구분
+    // 급지 구분 // 0 -> 기타 (데이터 변경해놓음)
     private Long parkingClass; // erd에서는 class // 주차장 급지구분 // int써도 되는데, 숫자형식은 그냥 다 long으로 씀.
 
     // 평일 운영 시작 시간
@@ -84,13 +82,13 @@ public class ParkingLot extends Location {
     private Long base_fee;
 
     // 주차 기본 시간
-    private Duration base_fee_duration;
+    private Long base_fee_duration;
 
     // 추가 단위 요금
     private Long extra_fee;
 
     // 추가 단위 시간
-    private Duration extra_fee_duration;
+    private Long extra_fee_duration;
 
     // 1일 주차권 요금 적용 시간
     private Long daily_fee;

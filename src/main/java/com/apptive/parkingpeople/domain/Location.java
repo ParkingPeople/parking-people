@@ -105,14 +105,15 @@ public class Location {
 
     // 주차장 Data import할때 Point라는 객체가 없어서 이렇게 해줘야 함.
     public Point getCoordinates() throws ParseException {
-        if(coordinates.isEmpty()){
+        if(coordinates == null ||coordinates.isEmpty()){
             // Location
-            String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
+            String pointWKT = String.format("POINT(%s %s)", this.longitude, this.latitude);
             // WKTReader를 통한 WKT를 실제 타입으로 변환
             Point point = (Point) new WKTReader().read(pointWKT);
-            coordinates = point;
+            this.setCoordinates(point);
+            this.coordinates = point; // TODO 위에꺼가 정확히 언제 처리 되는지 몰라서 일단 두개 해놓음.
         }
-        return coordinates;
+        return this.coordinates;
     }
     public void setCoordinates(Point coordinates) {
         this.coordinates = coordinates;

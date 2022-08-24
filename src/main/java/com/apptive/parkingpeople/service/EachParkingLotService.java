@@ -5,6 +5,7 @@ import com.apptive.parkingpeople.dto.EachParkingLotDto;
 import com.apptive.parkingpeople.dto.StatusEnum;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,10 @@ public class EachParkingLotService {
 
     private final ParkingLotRepository parkingLotRepository;
 
-    public ResponseEntity<EachParkingLotDto> getEachParkingLot(Long location_id){
+    public ResponseEntity<EachParkingLotDto> getEachParkingLot(Long location_id) throws ParseException {
 
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(location_id);
+        System.out.println("Tesst : " + parkingLot.get().getCoordinates().getX() + parkingLot.get().getCoordinates().getY());
 
         EachParkingLotDto eachParkingLotDto = new EachParkingLotDto();
         HttpHeaders headers = new HttpHeaders();
