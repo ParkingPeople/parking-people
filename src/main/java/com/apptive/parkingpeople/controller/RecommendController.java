@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/recommend")
+@RequestMapping
 @RequiredArgsConstructor
 public class RecommendController {
 
@@ -35,7 +35,7 @@ public class RecommendController {
     private final WalkingTimeService walkingTimeService;
 
     // http://localhost:8080/recommend?lon=129.086301&lat=35.220105&range=1000
-    @GetMapping("")
+    @GetMapping("/parking-lots/recommend")
     public ResponseEntity<RecommendResponseDto> recommendParkingLots(@RequestParam("lat") double y, @RequestParam("lon") double x,
                                                                      @RequestParam("range") double range_km) throws ParseException, JsonProcessingException {
 
