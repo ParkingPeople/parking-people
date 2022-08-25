@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/each")
+@RequestMapping("/parking-lot")
 @RequiredArgsConstructor
 public class EachParkingLotController {
 
