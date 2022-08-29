@@ -47,7 +47,7 @@ public class RecommendController {
 //                bestPoint.getCoordinate().x, range_km);
 
         // 원래는 4분할 하고 하나의 영역을 택하는게 맞는데(위의 1번 2번), 개수때문에 일단 아래와 같이 함. // TODO 서버에 띄우고 개수 확인하기
-        // 1` + 2`. 거리안의 주차장 찾기.
+        // 1` + 2`. 거리안의 주차장 찾기
         List<Location> locationsWithinRange = locationService.getLocationsWithinPoint(y,
                 x, range_km);
 
