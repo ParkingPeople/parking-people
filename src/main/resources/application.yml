@@ -28,3 +28,6 @@ logging:
   level:
     org.hibernate.SQL: debug #info
     org.hibernate.type: trace
+
+override:
+    value : 'from application.yml'
