@@ -30,8 +30,9 @@ fi
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
 #nohup java -jar $DEPLOY_JAR 2>&1 &
-nohup java -jar $DEPLOY_JAR >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+#nohup java -jar $DEPLOY_JAR >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+nohup java -jar $DEPLOY_JAR /dev/null >> $APPLICATION_LOG_PATH 2>> $DEPLOY_ERR_LOG_PATH < /dev/null &
 
-sleep 15
+sleep 3
 
 echo "> 배포 종료 : $(date +%c)" >> $DEPLOY_LOG_PATH
