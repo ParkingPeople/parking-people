@@ -15,7 +15,7 @@ public class MLController {
 
     private final MLService mlService;
 
-    @PostMapping("/upload/file")
+    @PostMapping("/upload/file") // test for git action
     public Boolean uploadFile(@RequestParam("id") Long id, @RequestParam("file") MultipartFile file){
 
         double emptyProbability = mlService.setActivityLevel(id, file);
