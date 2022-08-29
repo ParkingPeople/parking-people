@@ -31,3 +31,5 @@ logging:
 
 override:
     value : 'from application.yml'
+
+tmap-key:
