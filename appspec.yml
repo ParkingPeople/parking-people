@@ -13,6 +13,6 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: /opt/codedeploy-agent/deployment-root/7b3f3332-bf13-4dca-ace5-26aa3dad8505/d-AMO6LAYMI/deployment-archive/scripts/gh_deploy.sh
+    - location: scripts/gh_deploy.sh
       timeout: 60
-      runas: root
+      runas: ec2-user
