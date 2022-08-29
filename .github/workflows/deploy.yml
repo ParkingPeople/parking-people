@@ -32,7 +32,7 @@ jobs:
         env:
           spring.datasource.username: ${{ secrets.DB_ID }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-          TMAP_KEY: ${{ secrets.TMAP_KEY }}
+          tmap-key: ${{ secrets.TMAP_KEY }}
           # override.value: ${{ secrets.DI_FROM_SECRET }} 
           # override.value: 'from deploy.yaml' <-- 이렇게 사용해도 주입이 된다.
 

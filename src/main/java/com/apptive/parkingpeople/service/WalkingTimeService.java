@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class WalkingTimeService {
 
-    @Value("${TMAP_KEY}")
+    @Value("${tmap-key}")
     private String tmapKey;
 
     public void setWalkingTimeAndDistance(List<ParkingLot> parkingLots, double endX, double endY){

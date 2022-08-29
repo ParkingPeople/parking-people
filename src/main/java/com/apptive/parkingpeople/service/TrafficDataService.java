@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class TrafficDataService {
 
-    @Value("${TMAP_KEY}")
+    @Value("${tmap-key}")
     private String tmapKey;
 
     public double getCongestion(double x, double y) {
