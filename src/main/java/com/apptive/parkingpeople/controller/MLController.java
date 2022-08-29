@@ -2,13 +2,11 @@ package com.apptive.parkingpeople.controller;
 
 import com.apptive.parkingpeople.service.MLService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
 @RestController
 @RequiredArgsConstructor
 public class MLController {
