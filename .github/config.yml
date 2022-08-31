@@ -6,7 +6,7 @@ template: |
 version-resolver:
   major:
     labels:
-      - "release"
+      - "upgrade"
   minor:
     labels:
       - "enhancement"
