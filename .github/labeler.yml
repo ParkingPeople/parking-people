@@ -3,3 +3,5 @@ labels:
     - '\brelease\b'
   "enhancement":
     - '\bfeat\b'
+  "fix":
+    - '\bfix\b'

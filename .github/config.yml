@@ -4,11 +4,14 @@ template: |
   ## Changes
   $CHANGES
 version-resolver:
-  minor:
-    labels:
-      - "enhancement"
   major:
     labels:
       - "release"
+  minor:
+    labels:
+      - "enhancement"
+  patch:
+    labels:
+      - "fix"
   default: patch
 change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
