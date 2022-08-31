@@ -12,7 +12,6 @@ plugins {
 
 group = 'com.apptive'
 version = '0.0.1-SNAPSHOT'
-// sourceCompatibility = '11'
 
 java {
   toolchain {
@@ -42,8 +41,6 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 	compileOnly 'org.projectlombok:lombok'
-	//runtimeOnly 'com.h2database:h2'
-//	runtimeOnly 'mysql:mysql-connector-java'
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
 	implementation 'mysql:mysql-connector-java'
 
@@ -61,8 +58,6 @@ dependencies {
 			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-//	implementation 'org.n52.jackson:jackson-datatype-jts:1.2.4'
-//	implementation 'org.hibernate.orm:hibernate-spatial:5.6.10.Final'
 }
 
 // QueryDSL
