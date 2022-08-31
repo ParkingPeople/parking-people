@@ -21,8 +21,8 @@ spring:
     database: mysql
     database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect #이거 자동이라고 들은거 같은데, 나중에 확인해보기
 
-  profiles:
-    include: API-KEY
+#  profiles:
+#    include: API-KEY
 
 logging:
   level:
@@ -31,3 +31,5 @@ logging:
 
 override:
     value : 'from application.yml'
+
+tmap-key:
