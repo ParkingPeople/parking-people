@@ -1,0 +1,5 @@
+labels:
+  "new":
+    - '\brelease\b'
+  "enhancement":
+    - '\bfeat\b'
