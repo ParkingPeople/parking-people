@@ -1,5 +1,7 @@
 labels:
-  "new":
-    - '\brelease\b'
+  "upgrade":
+    - '\bnew\b'
   "enhancement":
     - '\bfeat\b'
+  "fix":
+    - '\bfix\b'
