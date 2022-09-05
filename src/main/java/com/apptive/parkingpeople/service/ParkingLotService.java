@@ -1,6 +1,5 @@
 package com.apptive.parkingpeople.service;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -84,7 +83,7 @@ public class ParkingLotService {
                 parkingLot.setActivityLevel(ActivityLevel.CROWDED);
             }
         }
-        parkingLotRepository.save(parkingLot); // FIXME: 이걸 해줘야 하나? 이거 안해도 저절로 되는걸로 아는데?.. 왜 이러지?...
+        parkingLotRepository.save(parkingLot);
     }
 
     public ResponseEntity<RecommendResponseDto> prioritizeParkingLotUsingActivityLevelAndWalkingTime(List<ParkingLot> parkingLots){
@@ -128,23 +127,4 @@ public class ParkingLotService {
 
         return new ResponseEntity<>(recommendResponseDto, headers, HttpStatus.OK);
     }
-
-    // TODO photoSubmission 도메인에서 photoResult로 대신했는데, 혹시나 몰라서 놔뒀습니다. 확인하고 지워주세요
-//    private ActivityLevel getActivityLevelFrom(PhotoResult result) {
-//        return ActivityLevelConverter.instance.convert(result.getEmptiness());
-//    }
-
-//    static final class ActivityLevelConverter implements Converter<Float, ActivityLevel> {
-//
-//        private ActivityLevelConverter() {}
-//
-//        public static ActivityLevelConverter instance = new ActivityLevelConverter();
-//
-//        @Override
-//        public @NonNull ActivityLevel convert(@NonNull Float emptiness) {
-//            // TODO: implement this
-//            throw new UnsupportedOperationException("Not implemented yet");
-//        }
-//
-//    }
 }

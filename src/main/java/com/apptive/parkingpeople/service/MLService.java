@@ -1,12 +1,14 @@
 package com.apptive.parkingpeople.service;
 
 import com.apptive.parkingpeople.domain.ActivityLevel;
+import com.apptive.parkingpeople.domain.Location;
 import com.apptive.parkingpeople.domain.ParkingLot;
 import com.apptive.parkingpeople.domain.PhotoSubmission;
 import com.apptive.parkingpeople.dto.MLDto;
 import com.apptive.parkingpeople.repository.ParkingLotRepository;
 import com.apptive.parkingpeople.repository.PhotoSubmissionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -16,22 +18,19 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MLService {
 
     private final ParkingLotRepository parkingLotRepository;
 
     private final PhotoSubmissionRepository photoSubmissionRepository;
 
-    public double setActivityLevel(Long id, MultipartFile file) {
-        Optional<ParkingLot> parkingLot = parkingLotRepository.findById(id);
-
-        PhotoSubmission photoSubmission = new PhotoSubmission();
-        photoSubmission.setLot(parkingLot.get());
-        photoSubmission.setTaken_at(LocalDateTime.now());
+    public ResponseEntity<Void> setActivityLevel(List<Location> locations, MultipartFile file) {
 
         double emptyProbability;
 
@@ -63,23 +62,35 @@ public class MLService {
         }catch (Exception e){
             System.out.println("=== Exception ===");
             System.out.println(e);
-            emptyProbability = 500;
+            log.error("ML 서버 이상 감지");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+        ActivityLevel activityLevel;
 
         double standard = 0.1;
-        if(emptyProbability == 500){
-            photoSubmission.setPhotoResult(ActivityLevel.UNKNOWN);
-        }
-        else if(emptyProbability >= standard){
-            photoSubmission.setPhotoResult(ActivityLevel.FREE);
+        if(emptyProbability >= standard){
+            activityLevel = ActivityLevel.FREE;
         }
         else{
-            photoSubmission.setPhotoResult(ActivityLevel.CROWDED);
+            activityLevel = ActivityLevel.CROWDED;
         }
 
-        photoSubmissionRepository.save(photoSubmission);
+        LocalDateTime time = LocalDateTime.now();
 
-        return emptyProbability;
+        for(Location location : locations) {
+            Long id = location.getId();
+            Optional<ParkingLot> parkingLot = parkingLotRepository.findById(id);
+
+            PhotoSubmission photoSubmission = new PhotoSubmission();
+
+            photoSubmission.setLot(parkingLot.get());
+            photoSubmission.setTaken_at(time);
+            photoSubmission.setPhotoResult(activityLevel);
+
+            photoSubmissionRepository.save(photoSubmission);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
