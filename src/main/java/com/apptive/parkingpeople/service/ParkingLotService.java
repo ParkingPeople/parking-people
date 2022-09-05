@@ -127,12 +127,4 @@ public class ParkingLotService {
 
         return new ResponseEntity<>(recommendResponseDto, headers, HttpStatus.OK);
     }
-
-    public List<ParkingLot> findParkingLotsByLocations(List<Location> locations){
-        List<ParkingLot> parkingLots = new ArrayList<>();
-        for(Location l : locations){
-            parkingLots.add(parkingLotRepository.findById(l.getId()).get());
-        }
-        return parkingLots;
-    }
 }
