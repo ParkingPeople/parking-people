@@ -17,7 +17,7 @@ spring:
       hibernate:
         # show_sql: true
         format_sql: true
-    show-sql: true
+    show-sql: false # dev에서 true
     database: mysql
     database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect #이거 자동이라고 들은거 같은데, 나중에 확인해보기
 
@@ -26,8 +26,9 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug #info
-    org.hibernate.type: trace
+    org.hibernate.SQL: info #debug
+    org.hibernate.type.BasicTypeRegistry: WARN # org.hibernate.type: trace
+
 
 override:
     value : 'from application.yml'
