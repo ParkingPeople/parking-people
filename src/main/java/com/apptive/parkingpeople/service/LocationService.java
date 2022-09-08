@@ -23,8 +23,6 @@ public class LocationService {
 
     @Transactional(readOnly = true)
     public List<Location> getLocationsWithinPoint(double lat, double lon, double range_km){
-        // 초기 반경안에 있을려면 bestPoint로 부터 range_km/2 의 거리까지 탐색해야함.
-//        range_km = range_km / 2; // 전체 다 하기 위해서 뺀거임(만약 recommendController의 1번과 2번을 쓰면 range를 반으로 해야함)
 
         LocationPoint northEast = GeometryUtil
                 .calculate(lat, lon, range_km, Direction.NORTHEAST.getBearing());
