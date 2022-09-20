@@ -52,7 +52,7 @@ public class MLService {
 
             HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(params, headers);
 
-            String apiURL = "http://ec2-43-201-27-101.ap-northeast-2.compute.amazonaws.com:8000/upload";
+            String apiURL = "http://52.79.118.220:8000/upload";
 
             RestTemplate restTemplate = new RestTemplate();
 
