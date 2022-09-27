@@ -5,11 +5,6 @@ spring:
     password:
     driver-class-name: org.mariadb.jdbc.Driver
 
-#    url: jdbc:mysql://localhost:3307/parking-people?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-#    username: root
-#    password: 1234
-#    driver-class-name: org.mariadb.jdbc.Driver
-
   jpa:
     hibernate:
       ddl-auto: none #create #update
