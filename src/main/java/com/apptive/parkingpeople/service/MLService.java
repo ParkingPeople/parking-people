@@ -52,7 +52,7 @@ public class MLService {
 
             HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(params, headers);
 
-            String apiURL = "http://52.79.118.220:8000/upload";
+            String apiURL = "https://vision.parkingpeople.app/upload";
 
             RestTemplate restTemplate = new RestTemplate();
 
